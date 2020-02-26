@@ -1,5 +1,6 @@
 # inchat-translate
-Public repository for the InChat group project for CIS 4398 - Capstone
+
+inchat-translate is a chat app integrated with Firebase and the Google Translation API. Recipients will be able to login, choose their preferred language and join a chat room. This is all regardless of what language other recipients may use. The text will be translated to the each user's preferred language.
 
 # Gettings started:
 <dl>
