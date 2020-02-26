@@ -1,6 +1,6 @@
 # inchat-translate
 
-inchat-translate is a chat app integrated with Firebase and Google translate API. Recipients would be able to login,choose their preferred language and join a chat room. Regardless of what language other recipients may use, the text will be translated to the users selected language.
+inchat-translate is a chat app integrated with Firebase and the Google Translation API. Recipients will be able to login, choose their preferred language and join a chat room. This is all regardless of what language other recipients may use. The text will be translated to the each user's preferred language.
 
 # Gettings started:
 <dl>
