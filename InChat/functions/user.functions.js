@@ -20,7 +20,7 @@ createUser = functions.auth.user().onCreate(event => {
         admin.database().ref('/users/${id}/chatIds').set('');
         admin.database().ref('/users/${id}/friends').set('');
     } catch (error) {
-        console.log("Error during createUser(): " + error);
+        console.log('Error during createUser(): ' + error);
         return false;
     }
 
@@ -42,12 +42,37 @@ deleteUser = functions.https.onRequest((request, response) => {
             '${userIdentifier}': FieldValue.delete()
         });
     } catch (error) {
-        console.log("Error during deleteUser(): " + error);
+        console.log('Error during deleteUser(): ' + error);
         response.send(false);
     }
 
     response.send(true);
 });
 
+// Promise-based check to find if a user does exist in the database system
+doesUserExist = functions.https.onRequest((request, response) => {
+    let userIdentifier = request.body.userId || null;
+
+    if (userIdentifier === null) {
+        response.send(false);
+    }
+
+    let userReference = db.collection('users').doc('${userIdentifier');
+    docRef.get().then((doc) => {
+        if (doc.exists) {
+            response.send(true);
+            return true;
+        } else {
+            response.send(false);
+            return true;
+        }
+    }).catch((error) => {
+        console.log('Error during doesUserExist(): ' + error);
+        response.send(null);
+        return false;
+    });
+});
+
 exports.createUser = this.createUser;
 exports.deleteUser = this.deleteUser;
+exports.doesUserExist = this.doesUserExist;

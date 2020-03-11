@@ -1,7 +1,7 @@
 /* jshint esversion: 8 */
 
 const functions = require('firebase-functions');
-const userFunctions = require('./user.functions')
+const userFunctions = require('./user.functions');
 
 // // Create and Deploy Your First Cloud Functions
 // // https://firebase.google.com/docs/functions/write-firebase-functions
