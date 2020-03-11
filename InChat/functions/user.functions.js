@@ -16,9 +16,9 @@ createUser = functions.auth.user().onCreate(event => {
     }
 
     try {
-        admin.database().ref('/users/${id}/name').set('${displayName}');
-        admin.database().ref('/users/${id}/chatIds').set('');
-        admin.database().ref('/users/${id}/friends').set('');
+        admin.database().ref(`/users/${id}/name`).set(`${displayName}`);
+        admin.database().ref(`/users/${id}/chatIds`).set('');
+        admin.database().ref(`/users/${id}/friends`).set('');
     } catch (error) {
         console.log('Error during createUser(): ' + error);
         return false;
@@ -31,7 +31,7 @@ createUser = functions.auth.user().onCreate(event => {
 deleteUser = functions.https.onRequest((request, response) => {
     let userIdentifier = request.body.userId || null;
     let FieldValue = admin.firestore.FieldValue || null;
-    let usersReference = db.collection('users').doc('${userIdentifier}') || null;
+    let usersReference = db.collection('users').doc(`${userIdentifier}`) || null;
 
     if (userIdentifier === null || FieldValue === null || usersReference === null) {
         response.send(false);
@@ -39,7 +39,7 @@ deleteUser = functions.https.onRequest((request, response) => {
     
     try {
         usersReference.update({
-            '${userIdentifier}': FieldValue.delete()
+            userIdentifier: FieldValue.delete()
         });
     } catch (error) {
         console.log('Error during deleteUser(): ' + error);
@@ -57,7 +57,7 @@ doesUserExist = functions.https.onRequest((request, response) => {
         response.send(false);
     }
 
-    let userReference = db.collection('users').doc('${userIdentifier');
+    let userReference = db.collection('users').doc(`${userIdentifier}`);
     docRef.get().then((doc) => {
         if (doc.exists) {
             response.send(true);
