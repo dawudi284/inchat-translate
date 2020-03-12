@@ -3,15 +3,9 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 
-// // Create and Deploy Your First Cloud Functions
-// // https://firebase.google.com/docs/functions/write-firebase-functions
-exports.helloWorld = functions.https.onRequest((request, response) => {
-    response.send('Hello from Firebase!');
-});
-
 // This event handler will run whenever a new account is created
 // through the Firebase authentication mechanisms
-exports.createUser = functions.auth.user().onCreate(event => {
+createUser = functions.auth.user().onCreate(event => {
     const user = event.data || null;
     const id = user.uid || null;
     const displayName = user.displayName || null;
@@ -34,7 +28,7 @@ exports.createUser = functions.auth.user().onCreate(event => {
 });
 
 // This HTTPS request must include a parameter labelled 'userId'
-exports.deleteUser = functions.https.onRequest((request, response) => {
+deleteUser = functions.https.onRequest((request, response) => {
     let userIdentifier = request.body.userId || null;
     let FieldValue = admin.firestore.FieldValue || null;
     let usersReference = db.collection('users').doc(`${userIdentifier}`) || null;
@@ -56,7 +50,7 @@ exports.deleteUser = functions.https.onRequest((request, response) => {
 });
 
 // Promise-based check to find if a user does exist in the database system
-exports.doesUserExist = functions.https.onRequest((request, response) => {
+doesUserExist = functions.https.onRequest((request, response) => {
     let userIdentifier = request.body.userId || null;
 
     if (userIdentifier === null) {
@@ -78,3 +72,7 @@ exports.doesUserExist = functions.https.onRequest((request, response) => {
         return false;
     });
 });
+
+exports.createUser = this.createUser;
+exports.deleteUser = this.deleteUser;
+exports.doesUserExist = this.doesUserExist;
