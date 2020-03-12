@@ -7,6 +7,8 @@ import { NavComponent } from './nav/nav.component';
 import { ChatsComponent } from './chats/chats.component';
 import { SettingsComponent } from './settings/settings.component';
 import { FriendsListComponent } from './friends-list/friends-list.component';
+import { HomeComponent } from './home/home.component';
+import { SignInComponent } from './sign-in/sign-in.component';
 
 @NgModule({
   declarations: [
@@ -14,7 +16,9 @@ import { FriendsListComponent } from './friends-list/friends-list.component';
     NavComponent,
     ChatsComponent,
     SettingsComponent,
-    FriendsListComponent
+    FriendsListComponent,
+    HomeComponent,
+    SignInComponent
   ],
   imports: [
     BrowserModule,

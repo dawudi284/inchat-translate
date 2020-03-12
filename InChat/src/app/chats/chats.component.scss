@@ -1,5 +1,5 @@
 #chatHolder{
-    background-color: rgb(42, 55, 83);
+    background-color: #0C4376;
     border-radius: 5px;
     border: rgba(19, 18, 18, 0.623);
     border-style: outset;
@@ -15,10 +15,16 @@
         border-top: none;
         border-left: none;
         border-right: none;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
     }
 
     #messageContainer {
-        background-color: #7AB1E4;
+        border: none !important;
+        border-radius: 5px;
+        border-style: inset; 
+        background-color: white;
+        
     }
 
 }
