@@ -1,0 +1,24 @@
+#chatHolder{
+    background-color: rgb(42, 55, 83);
+    border-radius: 5px;
+    border: rgba(19, 18, 18, 0.623);
+    border-style: outset;
+    overflow-x: hidden; 
+    overflow-x: auto; 
+    -moz-box-shadow:    inset 0 0 10px rgba(255, 255, 255, 0.164);
+    -webkit-box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.164);
+    box-shadow:         inset 0 0 10px rgba(255, 255, 255, 0.164);
+
+    .row {
+        border-bottom: rgba(19, 18, 18, 0.623);
+        border-style: outset;
+        border-top: none;
+        border-left: none;
+        border-right: none;
+    }
+
+    #messageContainer {
+        background-color: #7AB1E4;
+    }
+
+}
