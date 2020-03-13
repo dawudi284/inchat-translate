@@ -8,8 +8,7 @@ var expect = chai.expect;
 var assert = chai.assert;
 
 describe('User Functionality', function () {
-  describe('#createUser() JSON format', function () {
-    const displayName = 'Bob Smith';
+  const displayName = 'Bob Smith';
     let user = {
       'name': `${displayName}`,
       'chatIds': [
@@ -25,7 +24,8 @@ describe('User Functionality', function () {
         '24680'
       ]
     };
-
+  
+  describe('#createUser() JSON format', function () {
     it('should return true that user.name === displayName', function () {
       assert.equal(`${displayName}`, user.name);
     });
@@ -41,13 +41,14 @@ describe('User Functionality', function () {
     });
   });
 
+  // TODO: Add more testing for checking if user exists in the database
   describe('#doesUserExist() JSON format', function () {
-    it('should assert true === true', function () {
-      assert.equal(true, true);
-    });
+    
   });
 
+  // TODO: Add more testing for checking that a user was successfully
+  // or unsuccessfully removed from the database
   describe('#deleteUser() JSON format', function () {
-    // Add tests
+    
   });
 });
