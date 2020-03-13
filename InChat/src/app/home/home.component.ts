@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { auth } from 'firebase/app';
+import { MessageService } from '../services/message.service';
 
 @Component({
   selector: 'app-home',
@@ -9,24 +10,22 @@ import { auth } from 'firebase/app';
 })
 export class HomeComponent implements OnInit {
   loggedIn = false;
-  currentUser: auth.UserCredential;
-  constructor(private auth: AuthService) {}
+  constructor(private afAuth: AuthService, private messageService: MessageService) { }
 
   ngOnInit() {
-    this.isLoggedIn();
-    if(this.currentUser){
-      console.log(this.currentUser);
-    }
+    this.afAuth.Auth.auth.onAuthStateChanged(() => {
+      if (this.afAuth.Auth.auth.currentUser === null) {
+        this.loggedIn = false;
+        console.log('No user');
+        return;
+      } else {
+        this.loggedIn = true;
+        console.log(this.afAuth.Auth.auth.currentUser.displayName);
+        return;
+      }
+    });
   }
 
-  isLoggedIn() {
-    console.log(localStorage.getItem('loggedIn'));
-    if (localStorage.getItem('loggedIn') === 'true') {
-      this.loggedIn = true;
-    }
-  }
-  checkUser() {
-    console.log(this.auth.currentUser);
-  }
+  
 
 }

@@ -7,8 +7,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 })
 
 export class AuthService {
-  currentUser: auth.UserCredential;
-  constructor(public afAuth: AngularFireAuth) { }
+  constructor(public Auth: AngularFireAuth) { }
 
   // Sign in with Google
   GoogleAuth() {
@@ -17,7 +16,7 @@ export class AuthService {
 
   // Auth logic to run auth providers
   AuthLogin(provider) {
-    return this.afAuth.auth.signInWithPopup(provider)
+    return this.Auth.auth.signInWithPopup(provider)
     .then((result) => {
         console.log('You have been successfully logged in!');
     }).catch((error) => {
@@ -25,9 +24,10 @@ export class AuthService {
     });
   }
 
-  signOut() {
-    this.afAuth.auth.signOut().then((result) => {
+  signOut(loggedIn: boolean) {
+    this.Auth.auth.signOut().then((result) => {
       console.log('Signed out!');
+      loggedIn = false;
     }, (error) => {
       console.log(error);
     });
