@@ -1,16 +1,14 @@
 import { Injectable } from '@angular/core';
 import { auth } from 'firebase/app';
-import { AngularFireAuth } from "@angular/fire/auth";
+import { AngularFireAuth } from '@angular/fire/auth';
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class AuthService {
-
-  constructor(
-    public afAuth: AngularFireAuth, // Inject Firebase auth service
-  ) { }
+  currentUser: auth.UserCredential;
+  constructor(public afAuth: AngularFireAuth) { }
 
   // Sign in with Google
   GoogleAuth() {
@@ -24,7 +22,14 @@ export class AuthService {
         console.log('You have been successfully logged in!');
     }).catch((error) => {
         console.log('Error in authLogin: ' + error);
-    })
+    });
   }
 
+  signOut() {
+    this.afAuth.auth.signOut().then((result) => {
+      console.log('Signed out!');
+    }, (error) => {
+      console.log(error);
+    });
+  }
 }

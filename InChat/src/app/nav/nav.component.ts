@@ -12,7 +12,7 @@ import { SignInComponent } from '../sign-in/sign-in.component';
 })
 export class NavComponent implements OnInit {
 
-  constructor(public chatComponent: ChatsComponent, public friends: FriendsListComponent) { }
+  constructor() { }
 
   ngOnInit() {
   }
