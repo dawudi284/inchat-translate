@@ -1,0 +1,10 @@
+<div *ngIf="!loggedIn; else signOut">
+    <app-sign-in></app-sign-in>
+</div>
+<ng-template #signOut>
+    <button type="button" (click)="auth.signOut()">
+        Sign out
+    </button>
+</ng-template>
+
+<div>InChat</div>
