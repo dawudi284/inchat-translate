@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
 
-  constructor(private http: HttpClient, private db: AngularFirestore) { }
+  constructor(private http: HttpClient, private db: AngularFirestore, private afAuth: AuthService) { }
 
   doesUserExist(userId: string) {
     const postUrl = 'https://us-central1-inchat-tranlsate.cloudfunctions.net/doesUserExist';
