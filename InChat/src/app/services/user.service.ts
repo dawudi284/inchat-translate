@@ -1,15 +1,16 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { AngularFirestore } from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private db: AngularFirestore) { }
 
   doesUserExist(userId: string) {
-    const postUrl = "https://us-central1-inchat-tranlsate.cloudfunctions.net/doesUserExist";
+    const postUrl = 'https://us-central1-inchat-tranlsate.cloudfunctions.net/doesUserExist';
     let postData = {
       'userId': userId
     };
@@ -24,9 +25,9 @@ export class UserService {
 
         console.log(response);
       },
-      error: err => console.error("Error on doesUserExist: " + err),
+      error: err => console.error('Error on doesUserExist: ' + err),
       complete: () => {
-        console.log("doesUserExist complete.");
+        console.log('doesUserExist complete.');
       }
     };
 
@@ -34,7 +35,7 @@ export class UserService {
   }
 
   deleteUser(userId: string) {
-    const postUrl = "https://us-central1-inchat-tranlsate.cloudfunctions.net/deleteUser";
+    const postUrl = 'https://us-central1-inchat-tranlsate.cloudfunctions.net/deleteUser';
     let postData = {
       'userId': userId
     };
@@ -49,9 +50,9 @@ export class UserService {
 
         console.log(response);
       },
-      error: err => console.error("Error on deleteUser: " + err),
+      error: err => console.error('Error on deleteUser: ' + err),
       complete: () => {
-        console.log("deleteUser complete.");
+        console.log('deleteUser complete.');
       }
     };
 
