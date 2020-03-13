@@ -13,7 +13,7 @@ exports.helloWorld = functions.https.onRequest((request, response) => {
 // through the Firebase authentication mechanisms
 exports.createUser = functions.auth.user().onCreate(event => {
     const user = event.data || null;
-    const id = user.uid || null;
+    const id = user.uid || '';
     const displayName = user.displayName || null;
     const photoURL = user.photoURL || null;
 

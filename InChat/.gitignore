@@ -44,3 +44,9 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+
+InChat/dist/Inchat/*
+InChat/dist/InChat/app/index.html
+InChat/dist/InChat/app/polyfills.4ea41d8426ec45a3408e.js
+package-lock.json
+package.json
