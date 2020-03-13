@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  firebaseConfig : {
+  firebaseConfig: {
     apiKey: 'AIzaSyBw8ZuhQdGloFKMVWiFljNXACN1QUXsKPc',
     authDomain: 'inchat-tranlsate.firebaseapp.com',
     databaseURL: 'https://inchat-tranlsate.firebaseio.com',

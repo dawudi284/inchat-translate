@@ -2,7 +2,7 @@
     <app-sign-in></app-sign-in>
 </div>
 <ng-template #signOut>
-    <button type="button" (click)="auth.signOut()">
+    <button type="button" (click)="afAuth.signOut(loggedIn)">
         Sign out
     </button>
 </ng-template>

@@ -4,17 +4,19 @@
         <!--Chat list-->
         <div class="col-3" style="border: rgba(19, 18, 18, 0.623);
         border-style: outset; border-radius: 5px;">
-            <div class="row justify-content-center" id="chatsHeader" style="background-color:#7AB1E4; color:white;">Chats</div>
+            <div class="row justify-content-center" id="chatsHeader" style="background-color:#7AB1E4; color:white;">
+                Chats</div>
         </div>
         <!--Messages-->
         <div id="messageContainer" class="col-9" style="border: rgba(19, 18, 18, 0.623);
         border-style: outset;">
-            <div style="" class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="Message..." aria-label="Message"
+            <div style = "" class="input-group mb-3">
+                <input #messageBox type="text" class="form-control" placeholder="Message..." aria-label="Message"
                     aria-describedby="button-addon2">
                 <div>
                     <button class="btn btn-outline-secondary" type="button"
-                        style="background-color: #7AB1E4; color:white;" id="button-addon2">Send</button>
+                        style="background-color: #7AB1E4; color:white;" id="button-addon2"
+                        (click)="messageService.sendMessage(messageBox.value)">Send</button>
                 </div>
             </div>
         </div>

@@ -8,7 +8,7 @@ export class MessageService {
   constructor(private db: AngularFirestore) { }
 
   getMessages() {
-    return this.db.collection('chats' + this.chatId + '/messages', ref => ref.orderBy('sendTime')).valueChanges();
+    return this.db.collection('chats/' + this.chatId + '/messages', ref => ref.orderBy('sendTime')).valueChanges();
   }
 
 
