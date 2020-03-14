@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { auth } from 'firebase/app';
 import { MessageService } from '../services/message.service';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-home',
@@ -10,7 +11,8 @@ import { MessageService } from '../services/message.service';
 })
 export class HomeComponent implements OnInit {
   loggedIn = false;
-  constructor(private afAuth: AuthService, private messageService: MessageService) { }
+  currentUser: any;
+  constructor(private afAuth: AuthService, private messageService: MessageService, private userService: UserService) { }
 
   ngOnInit() {
     this.afAuth.Auth.auth.onAuthStateChanged(() => {
@@ -20,12 +22,18 @@ export class HomeComponent implements OnInit {
         return;
       } else {
         this.loggedIn = true;
-        console.log(this.afAuth.Auth.auth.currentUser.displayName);
+        this.currentUser = this.afAuth.Auth.auth.currentUser;
+        console.log(this.afAuth.Auth.auth.currentUser.uid);
         return;
       }
     });
+    this.userService.getDocumentIds('users');
   }
 
-  
-
+  deleteWrapper(input: string){
+    if (this.loggedIn === true) {
+      console.log('LoggedIn is true');
+      this.userService.deleteUser(input);
+    }
+  }
 }

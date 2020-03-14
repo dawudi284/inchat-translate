@@ -3,43 +3,34 @@ import { HttpClient } from '@angular/common/http';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { User } from 'firebase';
 import { AuthService } from './auth.service';
+import { Message, TranslationEntity} from '../models/message.model';
 
 @Injectable({
   providedIn: 'root'
 })
+
 export class MessageService {
   chatId: string;
-  constructor(private http: HttpClient, private db: AngularFirestore) { }
+  constructor(private http: HttpClient, private db: AngularFirestore, private afAuth: AuthService) { }
 
   getMessages(chatId: string, userId: string) {
     return this.db.collection('chats/' + this.chatId + '/messages', ref => ref.orderBy('sendTime')).valueChanges();
-  }
 
   //function used for sending messages. A user would send a message that would get stored on the database
-  sendMessage(chatId: string, userId: string, contents: string) {
-    const postUrl = 'https://us-central1-inchat-tranlsate.cloudfunctions.net/sendMessage'
-    let postData = {
-      'userId': userId,
-      'chatId': chatId,
-      'contents': contents
-    }
+  sendMessage(chatId: string, contents: string) {
+    let message: Message; //message object to be stored in database
+    message.chatId = chatId;
+    message.userId = this.afAuth.Auth.auth.currentUser.uid;
 
-    let response = null;
-    const myObservable = this.http.post(postUrl, postData);
-
-    const myObserver = {
-      next: data => {
-        const object = data;
-        response = object.response;
-
-        console.log(response);
-      },
-      error: err => console.error('Error on sendMessage: ' + err),
-      complete: () => {
-        console.log('sendMessage complete.');
-      }
+    let translation: TranslationEntity = {
+      language: this.afAuth.Auth.auth.currentUser, //Has to be in BCP-47 language codes
+      message: contents
     };
-
-    return response;
-  }
+    message.translation.push(translation)
+    this.db.collection('messages').add(message).then(function(docRef) {
+      console.log('Message logged with ID: ', docRef.id);
+    }).catch(function(error){
+      console.error('Error adding document: ', error);
+    })
+  } 
 }
