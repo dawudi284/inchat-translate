@@ -6,5 +6,10 @@
         Sign out
     </button>
 </ng-template>
+<div *ngIf="loggedIn">
+    <button type="button" (click)="userService.deleteUser(currentUser.uid);">
+        Delete {{ currentUser.uid }}
+    </button>
+</div>
 
 <div>InChat</div>
