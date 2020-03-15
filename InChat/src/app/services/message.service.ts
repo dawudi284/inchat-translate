@@ -15,6 +15,7 @@ export class MessageService {
 
   getMessages(chatId: string, userId: string) {
     return this.db.collection('chats/' + this.chatId + '/messages', ref => ref.orderBy('sendTime')).valueChanges();
+  }
 
   //function used for sending messages. A user would send a message that would get stored on the database
   sendMessage(chatId: string, contents: string) {
@@ -23,7 +24,7 @@ export class MessageService {
     message.userId = this.afAuth.Auth.auth.currentUser.uid;
 
     let translation: TranslationEntity = {
-      language: this.afAuth.Auth.auth.currentUser, //Has to be in BCP-47 language codes
+      language: 'en-US', //Has to be in BCP-47 language codes
       message: contents
     };
     message.translation.push(translation)
