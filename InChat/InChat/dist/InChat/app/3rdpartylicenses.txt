@@ -1,3 +1,6 @@
+@firebase/firestore
+Apache-2.0
+
 @firebase/component
 Apache-2.0
 
@@ -66,6 +69,9 @@ END OF TERMS AND CONDITIONS
 Apache-2.0
 
 @firebase/app
+Apache-2.0
+
+@firebase/webchannel-wrapper
 Apache-2.0
 
 rxjs
@@ -291,6 +297,8 @@ MIT
 
 @angular/fire/auth
 
+@angular/fire/firestore
+
 @firebase/auth
 Apache-2.0
 
@@ -498,6 +506,8 @@ Apache-2.0
 
 
 firebase/auth
+
+firebase/firestore
 
 @firebase/util
 Apache-2.0
