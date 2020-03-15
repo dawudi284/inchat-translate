@@ -2,7 +2,6 @@ import { Time } from '@angular/common';
 
 export interface Message {
     userId: string;
-    messId: string;
     chatId: string;
     timeSent: Time;
     translation?: (TranslationEntity)[] | null;

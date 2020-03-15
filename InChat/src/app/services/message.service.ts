@@ -11,7 +11,7 @@ import { Message, TranslationEntity} from '../models/message.model';
 
 export class MessageService {
   chatId: string;
-  constructor(private http: HttpClient, private db: AngularFirestore, private afAuth: AuthService) { }
+  constructor(private db: AngularFirestore, private afAuth: AuthService) { }
 
   getMessages(chatId: string, userId: string) {
     return this.db.collection('chats/' + this.chatId + '/messages', ref => ref.orderBy('sendTime')).valueChanges();
@@ -27,7 +27,7 @@ export class MessageService {
       language: 'en-US', //Has to be in BCP-47 language codes
       message: contents
     };
-    message.translation.push(translation)
+    
     this.db.collection('messages').add(message).then(function(docRef) {
       console.log('Message logged with ID: ', docRef.id);
     }).catch(function(error){
