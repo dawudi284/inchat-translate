@@ -6,7 +6,15 @@
         border-style: outset; border-radius: 5px;">
             <div class="row justify-content-center" id="chatsHeader" style="background-color:#7AB1E4; color:white;">
                 Chats</div>
+            <div style="position: absolute; bottom: 5px; background-color: green">    
+                <!--New Chat--> 
+                <button class="btn btn-outline-secondary" type="button"
+                    style="background-color: #7AB1E4; color:white;" id="button-addon2"
+                    >Add Chat</button>
+            </div>   
         </div>
+
+
         <!--Messages-->
         <div id="messageContainer" class="col-9" style="border: rgba(19, 18, 18, 0.623);
         border-style: outset;">
@@ -16,7 +24,7 @@
                 <div>
                     <button class="btn btn-outline-secondary" type="button"
                         style="background-color: #7AB1E4; color:white;" id="button-addon2"
-                        (click)="messageService.sendMessage(messageBox.value)">Send</button>
+                        >Send</button>
                 </div>
             </div>
         </div>
