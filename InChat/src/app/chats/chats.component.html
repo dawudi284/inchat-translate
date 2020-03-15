@@ -10,7 +10,7 @@
                 <!--New Chat--> 
                 <button class="btn btn-outline-secondary" type="button"
                     style="background-color: #7AB1E4; color:white;" id="button-addon2"
-                    >Add Chat</button>
+                    >New Chat</button>
             </div>   
         </div>
 
@@ -24,7 +24,7 @@
                 <div>
                     <button class="btn btn-outline-secondary" type="button"
                         style="background-color: #7AB1E4; color:white;" id="button-addon2"
-                        >Send</button>
+                        (click)="messageService.sendMessage(messageBox.value, messageBox.value)">Send</button>
                 </div>
             </div>
         </div>
