@@ -1,7 +1,7 @@
 import { Time } from '@angular/common';
 
 export interface User {
-    udId: string;
+    returning: boolean;
     user: User1;
 }
 export interface User1 {

@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { AuthService } from './auth.service';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, flatMap } from 'rxjs/operators';
+import { User } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +14,7 @@ export class UserService {
   constructor(private http: HttpClient, private db: AngularFirestore, private afAuth: AuthService) { }
   dbRef = this.db.collection('users');
   currentUser = this.afAuth.Auth.auth.currentUser;
+  users: AngularFirestoreDocument<User>;
   /*doesUserExist(userId: string) {
     const postUrl = 'https://us-central1-inchat-tranlsate.cloudfunctions.net/doesUserExist';
     let postData = {
@@ -64,31 +66,42 @@ export class UserService {
   }*/
 
   deleteUser(uId: string) {
-    this.db.collection('users').doc(uId).delete();
+    this.db.collection('users').doc(uId).delete()
   }
 
   doesUserExist(uId: string) {
-    if (this.db.collection('users').doc(uId).get()) {
-      console.log('User Exists');
-    } else {
-      console.log('user does not exist');
+  }
+
+  createUser(uId: string) {
+    if (this.afAuth.Auth.auth.currentUser) {
+      this.dbRef.doc(this.afAuth.Auth.auth.currentUser.uid).valueChanges().subscribe(data => {
+        const user = data;
+        if (user === undefined) {
+          console.log('added');
+          const user: User = {
+            returning: true,
+            user: {
+              uName: this.afAuth.Auth.auth.currentUser.displayName,
+              status: 'offline',
+              lastSeen: null,
+              language: 'en-US',
+              friends: [],
+              chats: []
+            }
+          };
+          this.dbRef.doc(uId).set({ user });
+          return;
+        }
+      }
+      );
     }
+
   }
 
-  async addUser(uId: string) {
-    await this.dbRef.add(uId);
-    this.dbRef.doc(uId).set({
-      uName: this.currentUser.displayName,
-      status: '',
-      lastSeen: '',
-      language: 'english',
-      friends: [],
-      chats: []
-    });
+  editUsername(uId: string, newName: string) {
+    this.db.collection('users').doc(uId).update({ uName: newName });
   }
 
-
- 
 
   getDocumentIds(collection: string) {
     console.log('in get doc ids');

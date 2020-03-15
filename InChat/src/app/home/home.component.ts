@@ -3,6 +3,8 @@ import { AuthService } from '../services/auth.service';
 import { auth } from 'firebase/app';
 import { MessageService } from '../services/message.service';
 import { UserService } from '../services/user.service';
+import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection } from '@angular/fire/firestore';
+import { User } from '../models/user.model';
 
 @Component({
   selector: 'app-home',
@@ -12,7 +14,13 @@ import { UserService } from '../services/user.service';
 export class HomeComponent implements OnInit {
   loggedIn = false;
   currentUser: any;
-  constructor(private afAuth: AuthService, private messageService: MessageService, private userService: UserService) { }
+  userRef = this.db.collection('users');
+  user: any;
+  constructor(
+    private afAuth: AuthService,
+    private messageService: MessageService,
+    private userService: UserService,
+    private db: AngularFirestore) { }
 
   ngOnInit() {
     this.afAuth.Auth.auth.onAuthStateChanged(() => {
@@ -23,17 +31,16 @@ export class HomeComponent implements OnInit {
       } else {
         this.loggedIn = true;
         this.currentUser = this.afAuth.Auth.auth.currentUser;
-        console.log(this.afAuth.Auth.auth.currentUser.uid);
-        return;
+       
+
       }
     });
-    this.userService.getDocumentIds('users');
   }
 
-  deleteWrapper(input: string){
+  deleteWrapper(inp: string) {
     if (this.loggedIn === true) {
       console.log('LoggedIn is true');
-      this.userService.deleteUser(input);
+      this.userService.deleteUser(inp);
     }
   }
 }
