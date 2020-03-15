@@ -78,3 +78,52 @@ exports.doesUserExist = functions.https.onRequest((request, response) => {
         return false;
     });
 });
+
+// Translate incoming message
+exports.updateChatMessage = functions.firestore.documents('chats/{chatId}').onUpdate((change, context) => {
+
+    const chatId = `${context.params.chatId}`
+    console.log(chatId);
+
+    // Get an object representing the current document
+    const newMessage = change.after.data();
+    console.log(newMessage);
+
+    const messages = newMessage.chat;
+    const lastMessage = messages[messages.length - 1] ;
+
+    const targetLanguages = LANGUAGES.filter((languageId) => languageId!==lastMessage.language);
+    console.log('TARGET LANGUAGES ');
+    console.log(targetLanguages);
+
+    let translatePromises = targetLanguages.map((lang) => translateMessage(lang,lastMessage));
+
+    return Promise.all(translatePromises);
+}
+); 
+
+//Translates to target language
+translateMessage = (language, lastMessage) =>{
+
+return translate.translate(lastMessage.text, {from: lastMessage.language, to: language})
+    .then((results) => {
+
+        console.log(' TRANSLATED!!! ') + results[0];
+
+        let translatedMessage = lastMessage;
+        translatedMessage.text = results[0];
+        translatedMessage.source = 'translated';
+        translatedMessage.language = language;
+
+        console.log(translatedMessage);
+
+        return saveMessage(language,translatedMessage);
+
+    })
+    .catch(err => {
+         console.error('ERROR:', err);
+         return null;
+    });
+}
+
+//Google Translate Api URL
