@@ -31,8 +31,6 @@ export class HomeComponent implements OnInit {
       } else {
         this.loggedIn = true;
         this.currentUser = this.afAuth.Auth.auth.currentUser;
-       
-
       }
     });
   }

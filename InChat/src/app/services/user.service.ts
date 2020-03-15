@@ -65,29 +65,44 @@ export class UserService {
     myObservable.subscribe(myObserver);
   }*/
 
-  deleteUser(uId: string) {
-    this.db.collection('users').doc(uId).delete()
+  async deleteUser(uId: string) {
+    await this.db.collection('users').doc(uId).delete();
+    return true;
   }
 
-  doesUserExist(uId: string) {
+  async doesUserExist(uId: string) {
+    let docExist: boolean;
+    const docRef = this.dbRef.doc(uId);
+    await docRef.get().toPromise().then((doc) => {
+      if (doc.exists) {
+        console.log('Document data:', doc.data());
+        docExist = true;
+      } else {
+        // doc.data() will be undefined in this case
+        console.log('No such document!');
+        docExist = false;
+      }
+    }).catch((error) => {
+      console.log('Error getting document:', error);
+    });
+    console.log(docExist);
+    return docExist;
   }
 
   createUser(uId: string) {
     if (this.afAuth.Auth.auth.currentUser) {
+      console.log(this.afAuth.Auth.auth.currentUser);
       this.dbRef.doc(this.afAuth.Auth.auth.currentUser.uid).valueChanges().subscribe(data => {
         const user = data;
         if (user === undefined) {
           console.log('added');
           const user: User = {
-            returning: true,
-            user: {
-              uName: this.afAuth.Auth.auth.currentUser.displayName,
-              status: 'offline',
-              lastSeen: null,
-              language: 'en-US',
-              friends: [],
-              chats: []
-            }
+            uName: this.afAuth.Auth.auth.currentUser.displayName,
+            status: 'offline',
+            lastSeen: null,
+            language: 'en-US',
+            friends: [],
+            chats: []
           };
           this.dbRef.doc(uId).set({ user });
           return;
@@ -98,9 +113,11 @@ export class UserService {
 
   }
 
-  editUsername(uId: string, newName: string) {
-    this.db.collection('users').doc(uId).update({ uName: newName });
+  editUsername(newName: string) {
+    this.db.collection('users').doc(this.afAuth.Auth.auth.currentUser.uid).update(
+      { 'user.uName': newName}).then(() => console.log('field updated'));
   }
+
 
 
   getDocumentIds(collection: string) {

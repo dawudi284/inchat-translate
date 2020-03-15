@@ -26,8 +26,8 @@ export class AuthService {
     });
   }
 
-  signOut(loggedIn: boolean) {
-    this.Auth.auth.signOut().then((result) => {
+  async signOut(loggedIn: boolean) {
+    await this.Auth.auth.signOut().then((result) => {
       console.log('Signed out!');
       loggedIn = false;
     }, (error) => {
