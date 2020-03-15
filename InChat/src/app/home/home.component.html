@@ -1,15 +1,1 @@
-<div *ngIf="!loggedIn; else signOut">
-    <app-sign-in></app-sign-in>
-</div>
-<ng-template #signOut>
-    <button type="button" (click)="afAuth.signOut(loggedIn)">
-        Sign out
-    </button>
-</ng-template>
-<div *ngIf="loggedIn">
-    <button type="button" (click)="userService.deleteUser(currentUser.uid);">
-        Delete {{ currentUser.uid }}
-    </button>
-</div>
-
 <div>InChat</div>
