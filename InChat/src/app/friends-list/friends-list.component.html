@@ -1,3 +1,9 @@
 <p>
-  friends-list works!
+    friends-list works!
+    <div class="form-group">
+        <label for="exampleInputEmail1">Change Username</label>
+        <input #uNameBox type="text" class="form-control" id="dispNameChange" aria-describedby="ChangeDisplayName">
+        <small id="ChangeDisplayName" class="form-text text-muted">Enter your new username</small>  
+    </div>
+    <button class="btn myButt" (click)="editWrapper(uNameBox.value); uNameBox.value = null;">Submit</button>
 </p>
