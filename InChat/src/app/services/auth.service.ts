@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
 import { auth } from 'firebase/app';
 import { AngularFireAuth } from '@angular/fire/auth';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class AuthService {
-  constructor(public Auth: AngularFireAuth) { }
+  constructor(public Auth: AngularFireAuth, private db: AngularFirestore) { }
 
   // Sign in with Google
   GoogleAuth() {
@@ -24,8 +26,8 @@ export class AuthService {
     });
   }
 
-  signOut(loggedIn: boolean) {
-    this.Auth.auth.signOut().then((result) => {
+  async signOut(loggedIn: boolean) {
+    await this.Auth.auth.signOut().then((result) => {
       console.log('Signed out!');
       loggedIn = false;
     }, (error) => {

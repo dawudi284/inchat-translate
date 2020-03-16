@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { AuthService } from './auth.service';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, flatMap } from 'rxjs/operators';
+import { User } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root'
@@ -13,82 +14,62 @@ export class UserService {
   constructor(private http: HttpClient, private db: AngularFirestore, private afAuth: AuthService) { }
   dbRef = this.db.collection('users');
   currentUser = this.afAuth.Auth.auth.currentUser;
-  /*doesUserExist(userId: string) {
-    const postUrl = 'https://us-central1-inchat-tranlsate.cloudfunctions.net/doesUserExist';
-    let postData = {
-      'userId': userId
-    };
+  users: AngularFirestoreDocument<User>;
 
-    let response = null;
-    const myObservable = this.http.post(postUrl, postData);
-
-    const myObserver = {
-      next: data => {
-        const object = data;
-        response = object.reponse;
-
-        console.log(response);
-      },
-      error: err => console.error('Error on doesUserExist: ' + err),
-      complete: () => {
-        console.log('doesUserExist complete.');
-        return response;
-      }
-    };
-    myObservable.subscribe(myObserver);
-  }*/
-
-  /*deleteUser(userId: string) {
-    console.log('deleteUser called');
-    const postUrl = 'https://us-central1-inchat-tranlsate.cloudfunctions.net/deleteUser';
-    const postData = {
-      'userId': userId
-    };
-
-    let response = null;
-    const myObservable = this.http.post(postUrl, postData);
-
-    const myObserver = {
-      next: data => {
-        const object = data;
-        response = object.reponse;
-        console.log(response);
-      },
-      error: err => console.error('Error on deleteUser: ' + err),
-      complete: () => {
-        console.log('deleteUser complete.');
-        console.log(response);
-      }
-    };
-    myObservable.subscribe(myObserver);
-  }*/
-
-  deleteUser(uId: string) {
-    this.db.collection('users').doc(uId).delete();
+  async deleteUser(uId: string) {
+    await this.db.collection('users').doc(uId).delete();
+    return true;
   }
 
-  doesUserExist(uId: string) {
-    if (this.db.collection('users').doc(uId).get()) {
-      console.log('User Exists');
-    } else {
-      console.log('user does not exist');
-    }
-  }
-
-  async addUser(uId: string) {
-    await this.dbRef.add(uId);
-    this.dbRef.doc(uId).set({
-      uName: this.currentUser.displayName,
-      status: '',
-      lastSeen: '',
-      language: 'english',
-      friends: [],
-      chats: []
+  async doesUserExist(uId: string) {
+    let docExist: boolean;
+    const docRef = this.dbRef.doc(uId);
+    await docRef.get().toPromise().then((doc) => {
+      if (doc.exists) {
+        console.log('Document data:', doc.data());
+        docExist = true;
+      } else {
+        // doc.data() will be undefined in this case
+        console.log('No such document!');
+        docExist = false;
+      }
+    }).catch((error) => {
+      console.log('Error getting document:', error);
     });
+    console.log(docExist);
+    return docExist;
+  }
+
+  createUser(uId: string) {
+    if (this.afAuth.Auth.auth.currentUser) {
+      console.log(this.afAuth.Auth.auth.currentUser);
+      this.dbRef.doc(this.afAuth.Auth.auth.currentUser.uid).valueChanges().subscribe(data => {
+        const user = data;
+        if (user === undefined) {
+          console.log('added');
+          const user: User = {
+            uName: this.afAuth.Auth.auth.currentUser.displayName,
+            status: 'offline',
+            lastSeen: null,
+            language: 'en-US',
+            friends: [],
+            chats: []
+          };
+          this.dbRef.doc(uId).set({ user });
+          return;
+        }
+      }
+      );
+    }
+
+  }
+
+  editUsername(newName: string) {
+    this.db.collection('users').doc(this.afAuth.Auth.auth.currentUser.uid).update(
+      { 'user.uName': newName}).then(() => console.log('field updated'));
   }
 
 
- 
 
   getDocumentIds(collection: string) {
     console.log('in get doc ids');
