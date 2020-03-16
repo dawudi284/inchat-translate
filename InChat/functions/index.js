@@ -96,7 +96,7 @@ exports.translateInitialMessage = functions.firestore.document(`messages/{newMes
 
     const localTranslationsMap = snapshot.data().translations;
     for (const property in localTranslationsMap) {
-      if (allowedLanguages.contains(`${property}`)) {
+      if (allowedLanguages.includes(`${property}`)) {
         console.log(`${property}: ${localTranslationsMap[property]}`);
       }
     }
