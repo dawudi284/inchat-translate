@@ -79,51 +79,29 @@ exports.doesUserExist = functions.https.onRequest((request, response) => {
     });
 });
 
-// Translate incoming message
-exports.updateChatMessage = functions.firestore.documents('chats/{chatId}').onUpdate((change, context) => {
+// Get each new message creation event and translate it, then add back to Firestore
+exports.translateInitialMessage = functions.firestore.document(`messages/{newMessage}`)
+  .onCreate(async (snapshot, context) => {
+    if (snapshot.data().translations === null) {
+      console.error('Translations map does not exist, no translations could be performed.');
+      return;
+    }
 
-    const chatId = `${context.params.chatId}`
-    console.log(chatId);
+    // Allowed languages
+    const allowedLanguages = [
+      'en-US',
+      'ko-KR',
+      'es-ES',
+    ];
 
-    // Get an object representing the current document
-    const newMessage = change.after.data();
-    console.log(newMessage);
+    const localTranslationsMap = snapshot.data().translations;
+    for (const property in localTranslationsMap) {
+      if (allowedLanguages.contains(`${property}`)) {
+        console.log(`${property}: ${localTranslationsMap[property]}`);
+      }
+    }
 
-    const messages = newMessage.chat;
-    const lastMessage = messages[messages.length - 1] ;
-
-    const targetLanguages = LANGUAGES.filter((languageId) => languageId!==lastMessage.language);
-    console.log('TARGET LANGUAGES ');
-    console.log(targetLanguages);
-
-    let translatePromises = targetLanguages.map((lang) => translateMessage(lang,lastMessage));
-
-    return Promise.all(translatePromises);
-}
-); 
-
-//Translates to target language
-translateMessage = (language, lastMessage) =>{
-
-return translate.translate(lastMessage.text, {from: lastMessage.language, to: language})
-    .then((results) => {
-
-        console.log(' TRANSLATED!!! ') + results[0];
-
-        let translatedMessage = lastMessage;
-        translatedMessage.text = results[0];
-        translatedMessage.source = 'translated';
-        translatedMessage.language = language;
-
-        console.log(translatedMessage);
-
-        return saveMessage(language,translatedMessage);
-
-    })
-    .catch(err => {
-         console.error('ERROR:', err);
-         return null;
-    });
-}
+    return;
+});
 
 //Google Translate Api URL
