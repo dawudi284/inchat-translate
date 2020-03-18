@@ -2,6 +2,9 @@
 
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
+admin.initializeApp();
+// const {Translate} = require('@google-cloud/translate').v2;
+// const translate = new Translate();
 
 // // Create and Deploy Your First Cloud Functions
 // // https://firebase.google.com/docs/functions/write-firebase-functions
@@ -80,28 +83,59 @@ exports.doesUserExist = functions.https.onRequest((request, response) => {
 });
 
 // Get each new message creation event and translate it, then add back to Firestore
-exports.translateInitialMessage = functions.firestore.document(`messages/{newMessage}`)
+exports.translateInitialMessage = functions.firestore.document(`messages/{id}`)
   .onCreate(async (snapshot, context) => {
-    if (snapshot.data().translations === null) {
-      console.error('Translations map does not exist, no translations could be performed.');
-      return;
+    // Check that message and language exist
+    if (snapshot.data().isTextBased === null) {
+      console.log('Error: isTextBased field is invalid');
+      return null;
     }
 
-    // Allowed languages
-    const allowedLanguages = [
-      'en-US',
-      'ko-KR',
-      'es-ES',
-    ];
-
-    const localTranslationsMap = snapshot.data().translations;
-    for (const property in localTranslationsMap) {
-      if (allowedLanguages.includes(`${property}`)) {
-        console.log(`${property}: ${localTranslationsMap[property]}`);
+    if (snapshot.data().isTextBased) {
+      // Text-based
+      if (snapshot.data().originalLanguage === null
+          || snapshot.data().oldMessage === null) {
+        console.log('Error: originalLanguage or originalMessage field is invalid');
+        return null;
       }
+      
+      const getTranslatedMessage = (_oldMessage, _oldLanguage, _newLanguage) => {
+        // Might need return await (blah blah);
+        return `Translation goes here. (${_newLanguage})`;
+      };
+
+      // Allowed languages
+      const allowedLanguages = [
+        'en-US',
+        'ko-KR',
+        'es-ES',
+      ];
+
+      // All Translations to update into document
+      let allTranslations = new Object;
+      const oldLanguage = snapshot.data().originalLanguage;
+      const oldMessage = snapshot.data().originalMessage;
+
+      for (const language of allowedLanguages) {
+        if (language === oldLanguage) {
+          allTranslations[oldLanguage] = oldMessage;
+        } else {
+          allTranslations[language] = getTranslatedMessage(oldMessage, oldLanguage, language);
+        }
+      }
+
+      return admin.firestore().doc(`messages/${context.params.id}`).set({
+        translations: allTranslations,
+      }, {merge: true});
+    } else {
+      // Chat-based
+      if (snapshot.data().originalVoice === null) {
+        console.log('Error: originalVoice field is invalid');
+        return null;
+      }
+
+      // Translate here and add to firebase in a promise
+      
+      return null;
     }
-
-    return;
-});
-
-//Google Translate Api URL
+  });
