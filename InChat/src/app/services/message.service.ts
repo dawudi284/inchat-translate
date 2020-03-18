@@ -27,11 +27,11 @@ export class MessageService {
       language: 'en-US', //Has to be in BCP-47 language codes
       message: contents
     };
-    
-    this.db.collection('messages').add(message).then(function(docRef) {
+
+    this.db.collection('messages').add(message).then( function(docRef) {
       console.log('Message logged with ID: ', docRef.id);
-    }).catch(function(error){
+    }).catch( function(error) {
       console.error('Error adding document: ', error);
-    })
-  } 
+    });
+  }
 }
