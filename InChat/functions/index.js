@@ -1,10 +1,12 @@
 /* jshint esversion: 8 */
 
 const functions = require('firebase-functions');
+
 const admin = require('firebase-admin');
 admin.initializeApp();
-// const {Translate} = require('@google-cloud/translate').v2;
-// const translate = new Translate();
+
+const {Translate} = require('@google-cloud/translate').v2;
+const translate = new Translate();
 
 // // Create and Deploy Your First Cloud Functions
 // // https://firebase.google.com/docs/functions/write-firebase-functions
@@ -101,7 +103,8 @@ exports.translateInitialMessage = functions.firestore.document(`messages/{id}`)
       
       const getTranslatedMessage = (_oldMessage, _oldLanguage, _newLanguage) => {
         // Might need return await (blah blah);
-        return `Translation goes here. (${_newLanguage})`;
+        // return `Translation goes here. (${_newLanguage})`;
+        return translate.translate(_oldMessage, _newLanguage);
       };
 
       // Allowed languages
