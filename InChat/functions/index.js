@@ -5,14 +5,8 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 admin.initializeApp();
 
-const {Translate} = require('@google-cloud/translate').v2;
-const translate = new Translate();
-
-// // Create and Deploy Your First Cloud Functions
-// // https://firebase.google.com/docs/functions/write-firebase-functions
-exports.helloWorld = functions.https.onRequest((request, response) => {
-    response.send('Hello from Firebase!');
-});
+const request = require('request-promise');
+const _ = require('lodash');
 
 // This event handler will run whenever a new account is created
 // through the Firebase authentication mechanisms
@@ -101,17 +95,37 @@ exports.translateInitialMessage = functions.firestore.document(`messages/{id}`)
         return null;
       }
       
-      const getTranslatedMessage = (_oldMessage, _oldLanguage, _newLanguage) => {
-        // Might need return await (blah blah);
-        // return `Translation goes here. (${_newLanguage})`;
-        return translate.translate(_oldMessage, _newLanguage);
+      const getTranslatedMessage = (_sourceLang, _targetLang, _text) => {
+        function createTranslateUrl(source, target, text) {
+          return `https://www.googleapis.com/language/translate/v2?key=AIzaSyBw8ZuhQdGloFKMVWiFljNXACN1QUXsKPc&source=${source}&target=${target}&q=${text}`;
+        }
+
+        let translation = {};
+        return request(createTranslateUrl(_sourceLang, _targetLang, _text), {resolveWithFullResponse: true}).then(
+          response => {
+            if (response.statusCode === 200) {
+              const resData = JSON.parse(response.body).data;
+
+              translation[_targetLang] = resData.translations[0].translatedText;
+
+              return admin.firestore().doc(`messages/${context.params.id}`).set({
+                translations: translation,
+              }, {merge: true});
+            }
+            else throw response.body;
+          });
       };
+
+      const promises = [];
 
       // Allowed languages
       const allowedLanguages = [
-        'en-US',
-        'ko-KR',
-        'es-ES',
+        'en',
+        'es',
+        'ko',
+        'it',
+        'ru',
+        'fr',
       ];
 
       // All Translations to update into document
@@ -119,17 +133,11 @@ exports.translateInitialMessage = functions.firestore.document(`messages/{id}`)
       const oldLanguage = snapshot.data().originalLanguage;
       const oldMessage = snapshot.data().originalMessage;
 
-      for (const language of allowedLanguages) {
-        if (language === oldLanguage) {
-          allTranslations[oldLanguage] = oldMessage;
-        } else {
-          allTranslations[language] = getTranslatedMessage(oldMessage, oldLanguage, language);
-        }
-      }
+      _.each(allowedLanguages, (lang) => {
+        promises.push(getTranslatedMessage(oldLanguage, lang, oldMessage));
+      });
 
-      return admin.firestore().doc(`messages/${context.params.id}`).set({
-        translations: allTranslations,
-      }, {merge: true});
+      return Promise.all(promises);
     } else {
       // Chat-based
       if (snapshot.data().originalVoice === null) {
