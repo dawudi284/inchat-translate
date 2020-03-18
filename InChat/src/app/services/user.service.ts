@@ -14,55 +14,6 @@ export class UserService {
   dbRef = this.db.collection('users');
   currentUser = this.afAuth.Auth.auth.currentUser;
   users: AngularFirestoreDocument<User>;
-  /*doesUserExist(userId: string) {
-    const postUrl = 'https://us-central1-inchat-tranlsate.cloudfunctions.net/doesUserExist';
-    let postData = {
-      'userId': userId
-    };
-
-    let response = null;
-    const myObservable = this.http.post(postUrl, postData);
-
-    const myObserver = {
-      next: data => {
-        const object = data;
-        response = object.reponse;
-
-        console.log(response);
-      },
-      error: err => console.error('Error on doesUserExist: ' + err),
-      complete: () => {
-        console.log('doesUserExist complete.');
-        return response;
-      }
-    };
-    myObservable.subscribe(myObserver);
-  }*/
-
-  /*deleteUser(userId: string) {
-    console.log('deleteUser called');
-    const postUrl = 'https://us-central1-inchat-tranlsate.cloudfunctions.net/deleteUser';
-    const postData = {
-      'userId': userId
-    };
-
-    let response = null;
-    const myObservable = this.http.post(postUrl, postData);
-
-    const myObserver = {
-      next: data => {
-        const object = data;
-        response = object.reponse;
-        console.log(response);
-      },
-      error: err => console.error('Error on deleteUser: ' + err),
-      complete: () => {
-        console.log('deleteUser complete.');
-        console.log(response);
-      }
-    };
-    myObservable.subscribe(myObserver);
-  }*/
 
   async deleteUser(uId: string) {
     await this.db.collection('users').doc(uId).delete();

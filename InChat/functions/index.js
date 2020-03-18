@@ -1,13 +1,13 @@
 /* jshint esversion: 8 */
 
 const functions = require('firebase-functions');
-const admin = require('firebase-admin');
 
-// // Create and Deploy Your First Cloud Functions
-// // https://firebase.google.com/docs/functions/write-firebase-functions
-exports.helloWorld = functions.https.onRequest((request, response) => {
-    response.send('Hello from Firebase!');
-});
+const admin = require('firebase-admin');
+admin.initializeApp();
+
+const request = require('request-promise');
+const _ = require('lodash');
+const GLOBAL_KEY = "";
 
 // This event handler will run whenever a new account is created
 // through the Firebase authentication mechanisms
@@ -79,51 +79,75 @@ exports.doesUserExist = functions.https.onRequest((request, response) => {
     });
 });
 
-// Translate incoming message
-exports.updateChatMessage = functions.firestore.documents('chats/{chatId}').onUpdate((change, context) => {
+// Get each new message creation event and translate it, then add back to Firestore
+exports.translateInitialMessage = functions.firestore.document(`messages/{id}`)
+  .onCreate(async (snapshot, context) => {
+    // Check that message and language exist
+    if (snapshot.data().isTextBased === null) {
+      console.log('Error: isTextBased field is invalid');
+      return null;
+    }
 
-    const chatId = `${context.params.chatId}`
-    console.log(chatId);
+    if (snapshot.data().isTextBased) {
+      // Text-based
+      if (snapshot.data().originalLanguage === null
+          || snapshot.data().oldMessage === null) {
+        console.log('Error: originalLanguage or originalMessage field is invalid');
+        return null;
+      }
+      
+      const getTranslatedMessage = (_sourceLang, _targetLang, _text) => {
+        function createTranslateUrl(source, target, text) {
+          return `https://www.googleapis.com/language/translate/v2?key=${GLOBAL_KEY}&source=${source}&target=${target}&q=${text}`;
+        }
 
-    // Get an object representing the current document
-    const newMessage = change.after.data();
-    console.log(newMessage);
+        let translation = {};
+        return request(createTranslateUrl(_sourceLang, _targetLang, _text), {resolveWithFullResponse: true}).then(
+          response => {
+            if (response.statusCode === 200) {
+              const resData = JSON.parse(response.body).data;
 
-    const messages = newMessage.chat;
-    const lastMessage = messages[messages.length - 1] ;
+              translation[_targetLang] = resData.translations[0].translatedText;
 
-    const targetLanguages = LANGUAGES.filter((languageId) => languageId!==lastMessage.language);
-    console.log('TARGET LANGUAGES ');
-    console.log(targetLanguages);
+              return admin.firestore().doc(`messages/${context.params.id}`).set({
+                translations: translation,
+              }, {merge: true});
+            }
+            else throw response.body;
+          });
+      };
 
-    let translatePromises = targetLanguages.map((lang) => translateMessage(lang,lastMessage));
+      const promises = [];
 
-    return Promise.all(translatePromises);
-}
-); 
+      // Allowed languages
+      const allowedLanguages = [
+        'en',
+        'es',
+        'ko',
+        'it',
+        'ru',
+        'fr',
+      ];
 
-//Translates to target language
-translateMessage = (language, lastMessage) =>{
+      // All Translations to update into document
+      let allTranslations = new Object;
+      const oldLanguage = snapshot.data().originalLanguage;
+      const oldMessage = snapshot.data().originalMessage;
 
-return translate.translate(lastMessage.text, {from: lastMessage.language, to: language})
-    .then((results) => {
+      _.each(allowedLanguages, (lang) => {
+        promises.push(getTranslatedMessage(oldLanguage, lang, oldMessage));
+      });
 
-        console.log(' TRANSLATED!!! ') + results[0];
+      return Promise.all(promises);
+    } else {
+      // Chat-based
+      if (snapshot.data().originalVoice === null) {
+        console.log('Error: originalVoice field is invalid');
+        return null;
+      }
 
-        let translatedMessage = lastMessage;
-        translatedMessage.text = results[0];
-        translatedMessage.source = 'translated';
-        translatedMessage.language = language;
-
-        console.log(translatedMessage);
-
-        return saveMessage(language,translatedMessage);
-
-    })
-    .catch(err => {
-         console.error('ERROR:', err);
-         return null;
-    });
-}
-
-//Google Translate Api URL
+      // Translate here and add to firebase in a promise
+      
+      return null;
+    }
+  });
