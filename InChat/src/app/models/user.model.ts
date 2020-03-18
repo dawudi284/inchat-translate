@@ -7,6 +7,4 @@ export interface User {
     language: string;
     friends?: (string)[] | null;
     chats?: (string)[] | null;
-
 }
-   
