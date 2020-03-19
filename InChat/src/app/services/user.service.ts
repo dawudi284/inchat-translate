@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { AuthService } from './auth.service';
 import { Observable } from 'rxjs';
@@ -11,7 +10,7 @@ import { User } from '../models/user.model';
 })
 export class UserService {
 
-  constructor(private http: HttpClient, private db: AngularFirestore, private afAuth: AuthService) { }
+  constructor(private db: AngularFirestore, private afAuth: AuthService) { }
   dbRef = this.db.collection('users');
   currentUser = this.afAuth.Auth.auth.currentUser;
   users: AngularFirestoreDocument<User>;
@@ -58,18 +57,14 @@ export class UserService {
           this.dbRef.doc(uId).set({ user });
           return;
         }
-      }
-      );
+      });
     }
-
   }
 
   editUsername(newName: string) {
     this.db.collection('users').doc(this.afAuth.Auth.auth.currentUser.uid).update(
-      { 'user.uName': newName}).then(() => console.log('field updated'));
+      { 'user.uName': newName }).then(() => console.log('field updated'));
   }
-
-
 
   getDocumentIds(collection: string) {
     console.log('in get doc ids');

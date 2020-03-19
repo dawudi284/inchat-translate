@@ -49,18 +49,32 @@
       </div>
       <div class="modal-body">
         <!--Edit uName-->
-        
-          <div class="form-group">
-            <label for="exampleInputEmail1">Change Username</label>
-            <input #uNameBox type="text" class="form-control" id="dispNameChange" aria-describedby="ChangeDisplayName">
-            <small id="ChangeDisplayName" class="form-text text-muted">Enter your new username</small>
+        <div class="form-group">
+          <label for="exampleInputEmail1">Change Username</label>
+          <input #uNameBox type="text" class="form-control" id="dispNameChange" aria-describedby="ChangeDisplayName">
+          <small id="ChangeDisplayName" class="form-text text-muted">Enter your new username</small>
+        </div>
+        <button class="btn myButt" (click)="editWrapper(uNameBox.value); uNameBox.value = null;">Submit</button>
+        <hr>
+
+        <!--Change Language-->
+        <div class="dropdown show">
+          <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Change receiving Language
+          </a>
+
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+            <li *ngFor="let code of settings.codes; index as i" class="dropdown-item" value="{{code}}" (click)="settings.changeLanguage(code)">
+              {{settings.codeNames[i]}}</li>
+
           </div>
-          <button class="btn myButt" (click)="editWrapper(uNameBox.value); uNameBox.value = null;">Submit</button>
-        
+        </div>
         <hr>
         <!--Alert-->
-        <div *ngIf="showAlert === true" class="alert alert-danger" role="alert"><p>This will permanently delete, your
-          account. Are you sure you want to proceed?</p>
+        <div *ngIf="showAlert === true" class="alert alert-danger" role="alert">
+          <p>This will permanently delete, your
+            account. Are you sure you want to proceed?</p>
           <button class="btn btn-danger" data-dismiss="modal" (click)="deleteWrapper(currentUser.uid);">Delete</button>
           <button class="btn btn-light" (click)="showAlert = false"> Cancel</button>
         </div>
