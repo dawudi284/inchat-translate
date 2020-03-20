@@ -27,7 +27,7 @@ export class NavComponent implements OnInit {
     private afAuth: AuthService,
     private userService: UserService,
     private db: AngularFirestore,
-    private settings: SettingsService) { }
+    public settings: SettingsService) { }
 
   ngOnInit() {
     this.afAuth.Auth.auth.onAuthStateChanged(async () => {

@@ -9,8 +9,8 @@ export class SettingsService {
 
   constructor(private db: AngularFirestore, private afAuth: AuthService) { }
 
-  codes: string[] = ['en', 'es', 'fr', 'it', 'ko', 'ru'];
-  codeNames: string[] = ['English', 'Spanish', 'French', 'Italian', 'Korean', 'Russian'];
+  codes: string[] = ['en', 'es', 'fr', 'it', 'ko', 'ru', 'ur'];
+  codeNames: string[] = ['English', 'Spanish', 'French', 'Italian', 'Korean', 'Russian', 'Urdu'];
   
 
   ngOnInit() {

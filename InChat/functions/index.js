@@ -7,7 +7,7 @@ admin.initializeApp();
 
 const request = require('request-promise');
 const _ = require('lodash');
-const GLOBAL_KEY = "";
+const GLOBAL_KEY = 'AIzaSyBw8ZuhQdGloFKMVWiFljNXACN1QUXsKPc';
 
 // This event handler will run whenever a new account is created
 // through the Firebase authentication mechanisms
@@ -127,6 +127,7 @@ exports.translateInitialMessage = functions.firestore.document(`messages/{id}`)
         'it',
         'ru',
         'fr',
+        'ur',
       ];
 
       // All Translations to update into document
