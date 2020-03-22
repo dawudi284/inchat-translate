@@ -12,7 +12,7 @@ import { UserService } from '../services/user.service';
 })
 export class ChatsComponent implements OnInit {
 
-  constructor(private chat: ChatService, private afAuth: AuthService, public messageService: MessageService, private userService: UserService) { }
+  constructor(public chat: ChatService, private afAuth: AuthService, public messageService: MessageService, private userService: UserService) { }
 
   ngOnInit() {
     this.afAuth.Auth.auth.onAuthStateChanged(() => {

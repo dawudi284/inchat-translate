@@ -10,23 +10,29 @@ import { Observable, combineLatest, of } from 'rxjs';
   providedIn: 'root'
 })
 export class ChatService {
-  constructor(
-    private router: Router,
-    private db: AngularFirestore,
-    private authService: AuthService
-  ) {}
+  constructor(private db: AngularFirestore, private afAuth: AuthService, private router:Router) { }
 
-  getChats(chatId) {
-    return this.db.collection<any>('chats').doc(chatId).snapshotChanges().pipe(
-        map(doc => {
-          const data: any = doc.payload.data();
-          return { id: doc.payload.id, ...data };
-        })
-      );
+  getUserChats(collection: string) {
+    console.log('in get user chats');
+    let ids: any;
+    let finished = false;
+    const items = this.db.collection(collection).valueChanges({ idField: collection + 'ids' });
+    const myObserver = {
+      next: data => {
+        console.log('in next');
+      },
+      error: err => console.error('Error on getUserChats: ' + err),
+      complete: () => {
+        console.log('complete');
+        finished = true;
+        console.log('ids: ' + ids);
+      }
+    };
+    items.subscribe(myObserver);
   }
 
   async createchat() {
-    const uid  = await this.authService.Auth.auth.currentUser.uid;
+    const uid  = await this.afAuth.Auth.auth.currentUser.uid;
     const data = { uid, createdAt: Date.now(), count: 0, messages: [] };
 
     const docRef = await this.db.collection('chats').add(data);
