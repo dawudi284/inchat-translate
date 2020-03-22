@@ -26,7 +26,7 @@ export class ChatService {
   }
 
   async createchat() {
-    const { uid } = await this.authService.getUser();
+    const uid  = await this.authService.Auth.auth.currentUser.uid;
     const data = { uid, createdAt: Date.now(), count: 0, messages: [] };
 
     const docRef = await this.db.collection('chats').add(data);
