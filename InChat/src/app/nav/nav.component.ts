@@ -7,6 +7,7 @@ import { SignInComponent } from '../sign-in/sign-in.component';
 import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { AuthService } from '../services/auth.service';
 import { UserService } from '../services/user.service';
+import { SettingsService } from '../services/settings.service';
 
 
 @Component({
@@ -25,7 +26,8 @@ export class NavComponent implements OnInit {
   constructor(
     private afAuth: AuthService,
     private userService: UserService,
-    private db: AngularFirestore) { }
+    private db: AngularFirestore,
+    public settings: SettingsService) { }
 
   ngOnInit() {
     this.afAuth.Auth.auth.onAuthStateChanged(async () => {
@@ -48,15 +50,14 @@ export class NavComponent implements OnInit {
     });
   }
 
-  deleteWrapper() {
+  async deleteWrapper() {
     const uid = this.afAuth.Auth.auth.currentUser.uid;
-    console.log(uid);
     if (this.loggedIn === true) {
+      this.afAuth.signOut(true);
+      console.log('Sign Out');
       console.log('B4 delete');
-      this.userService.deleteUser(uid).then(() => {
+      await this.userService.deleteUser(uid).then(() => {
         console.log('deleted');
-        console.log('Sign Out');
-        this.afAuth.signOut(true);
       });
 
       console.log('After');

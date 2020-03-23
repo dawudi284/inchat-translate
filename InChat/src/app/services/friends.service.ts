@@ -11,6 +11,7 @@ import { map } from 'rxjs/operators';
 
 export class FriendsService {
 
+<<<<<<< HEAD
   constructor(private http: HttpClient, private db: AngularFirestore, private afAuth: AuthService) { }
   dbRef = this.db.collection('users');
   currentUser = this.afAuth.Auth.auth.currentUser;
@@ -133,5 +134,8 @@ export class FriendsService {
 
   }
   */
+=======
+  constructor() { }
+>>>>>>> b335f726fca90d3c3b028325c183fa95934d64e1
 
 }
