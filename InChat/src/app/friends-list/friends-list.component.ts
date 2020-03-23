@@ -22,7 +22,7 @@ export class FriendsListComponent implements OnInit {
     var uid = this.afAuth.Auth.auth.currentUser.uid
 
     //asynchronus friends list because function returns promise
-    this.friends = this.friendsService.listFriends(uid);
+    this.friends = await this.friendsService.listFriends(uid);
   }
 
 }

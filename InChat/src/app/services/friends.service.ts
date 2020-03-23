@@ -31,6 +31,7 @@ export class FriendsService {
       });
     return friends;
     */
+    return friends;
   }
 
   deleteFriend(uID: string, fID: string){
@@ -49,6 +50,4 @@ export class FriendsService {
     return true;
   }
 
-  //uIDtouName(uID: string){}
-  //uNametouID(uName: string){}
 }
