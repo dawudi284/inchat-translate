@@ -1,13 +1,24 @@
-<<<<<<< HEAD
-<p>
-    friends-list works!
-    <div class="form-group">
-        <label for="exampleInputEmail1">Change Username</label>
-        <input #uNameBox type="text" class="form-control" id="dispNameChange" aria-describedby="ChangeDisplayName">
-        <small id="ChangeDisplayName" class="form-text text-muted">Enter your new username</small>  
+<div id="addFriend" class="col-3" style="padding-top:10px">
+    <div style = "" class="input-group mb-3">
+        <input #addBox type="text" class="form-control" placeholder="Add Friend" aria-label="Message"
+            onkeydown = "if (event.keyCode == 13) document.getElementById('button-addon3').click()"
+            aria-describedby="button-addon2">
+            <div>
+                <button class="btn btn-outline-secondary" type="button"
+                    style="background-color: #7AB1E4; color:white;" id="button-addon3"
+                    (click)="friendsService.addFriend(uid, addBox.value)">Add</button>
+            </div>
     </div>
-    <button class="btn myButt" (click)="editWrapper(uNameBox.value); uNameBox.value = null;">Submit</button>
+</div>
+<p>
+    Friends List of {{uid}} (lol)
 </p>
-=======
+<ul>
+    <div *ngFor="let friend of friends" class="col-3" style="padding:10px">
+        <button class="btn btn-outline-secondary" type="button" 
+            style="background-color: #ff4444; color:white;" id="button-addon4"
+            (click)="friendsService.deleteFriend(uid, friend)">Delete</button>
+        {{ friend }}
+    </div>
+</ul>
 
->>>>>>> b335f726fca90d3c3b028325c183fa95934d64e1

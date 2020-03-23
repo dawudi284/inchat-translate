@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { auth } from 'firebase/app';
-import { MessageService } from '../services/message.service';
 import { FriendsService } from '../services/friends.service';
+import { HttpClient } from '@angular/common/http';
+import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
+
 
 @Component({
   selector: 'app-friends-list',
@@ -11,10 +13,16 @@ import { FriendsService } from '../services/friends.service';
 })
 export class FriendsListComponent implements OnInit {
 
-  constructor(private afAuth: AuthService, private messageService: MessageService, private  friendsService: FriendsService) { }
+  constructor(private afAuth: AuthService, private  friendsService: FriendsService) { }
 
-  ngOnInit() {
-    
+    friends;
+    uid = this.afAuth.Auth.auth.currentUser.uid;
+
+  async ngOnInit() {
+    var uid = this.afAuth.Auth.auth.currentUser.uid
+
+    //asynchronus friends list because function returns promise
+    this.friends = this.friendsService.listFriends(uid);
   }
 
 }
