@@ -5,6 +5,7 @@ import { AuthService } from './auth.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import * as firebase from 'firebase/app';
+import { User } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,7 @@ export class FriendsService {
   currentUser = this.afAuth.Auth.auth.currentUser;
 
   async listFriends(uID: string){
-   // not reactive, but works, wont update with added friends
+    // not reactive, but works, wont update with added friends
     var friends = await this.dbRef.doc(uID).ref.get().then(doc => {
       console.log(doc.data());
       return doc.data().user.friends;
@@ -26,10 +27,12 @@ export class FriendsService {
     // Dynamic as per "valueChanges()," automatically updates when friends are added
     /*
     var friends = await this.dbRef.doc(uID).valueChanges().subscribe(doc => {
-      console.log(doc);
-      return doc.data().user.friends;
+      const user = doc as User;
+      console.log(user.uName);
+      console.log(user);
+      return user.friends;
+      //return doc.data().user.friends;
       });
-    return friends;
     */
     return friends;
   }
