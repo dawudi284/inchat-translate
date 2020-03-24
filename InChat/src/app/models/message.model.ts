@@ -4,9 +4,5 @@ export interface Message {
     userId: string;
     chatId: string;
     timeSent: Time;
-    translation?: (TranslationEntity)[] | null;
-}
-export interface TranslationEntity {
-    language: string;
-    message: string;
+    translations: Map<string, string>;
 }
