@@ -41,20 +41,19 @@ export class UserService {
 
   createUser(uId: string) {
     if (this.afAuth.Auth.auth.currentUser) {
-      console.log(this.afAuth.Auth.auth.currentUser);
       this.dbRef.doc(this.afAuth.Auth.auth.currentUser.uid).valueChanges().subscribe(data => {
         const user = data;
         if (user === undefined) {
-          console.log('added');
-          const user: User = {
+          const userDB: User = {
             uName: this.afAuth.Auth.auth.currentUser.displayName,
+            email: this.afAuth.Auth.auth.currentUser.email,
             status: 'offline',
             lastSeen: null,
             language: 'en-US',
             friends: [],
             chats: []
           };
-          this.dbRef.doc(uId).set({ user });
+          this.dbRef.doc(uId).set({ userDB });
           return;
         }
       });
@@ -66,23 +65,5 @@ export class UserService {
       { 'user.uName': newName }).then(() => console.log('field updated'));
   }
 
-  getDocumentIds(collection: string) {
-    console.log('in get doc ids');
-    let ids: any;
-    let finished = false;
-    const items = this.db.collection(collection).valueChanges({ idField: collection + 'ids' });
-    const myObserver = {
-      next: data => {
-        console.log('in next');
-      },
-      error: err => console.error('Error on getDocIds: ' + err),
-      complete: () => {
-        console.log('complete');
-        finished = true;
-        console.log('ids: ' + ids);
-      }
-    };
-    items.subscribe(myObserver);
-
-  }
+  
 }
