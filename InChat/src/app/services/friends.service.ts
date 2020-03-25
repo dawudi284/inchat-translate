@@ -5,6 +5,7 @@ import { AuthService } from './auth.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import * as firebase from 'firebase/app';
+//import { UserService } from '../services/user.service';
 import { User } from '../models/user.model';
 
 @Injectable({

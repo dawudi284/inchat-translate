@@ -85,4 +85,12 @@ export class UserService {
     items.subscribe(myObserver);
 
   }
+
+  async uIDToUname(uID: string){
+    var uName = await this.dbRef.doc(uID).ref.get().then(doc => {
+      console.log(doc.data().uName);
+      return doc.data().user.uName;
+    });
+    return uName;
+  }
 }
