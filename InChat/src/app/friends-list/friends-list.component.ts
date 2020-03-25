@@ -22,6 +22,8 @@ export class FriendsListComponent implements OnInit {
     uName;
 
   async ngOnInit() {
+    
+    this.userService.emailToUID("tug51985@temple.edu");
     //var uid = this.afAuth.Auth.auth.currentUser.uid
     this.uName = await this.userService.uIDToUname(this.uid);
 

@@ -86,10 +86,33 @@ export class UserService {
   }
 
   async uIDToUname(uID: string){
-    var uName = await this.dbRef.doc(uID).ref.get().then(doc => {
+    let uName = await this.dbRef.doc(uID).ref.get().then(doc => {
       console.log(doc.data().uName);
       return doc.data().user.uName;
     });
     return uName;
   }
+
+  async uIDtoEmail(uID: string){
+    let email = await this.dbRef.doc(uID).ref.get().then(doc => {
+      console.log(doc.data().email);
+      return doc.data().user.email;
+    });
+    return email;
+  }
+
+  async emailToUID(email: string){
+    //var query = this.db.collection("users", ref => ref.where("email", "==", email));
+    //db query
+    var queryRef = this.dbRef.ref.where("email", "==", email);
+    let uID = await queryRef.get().then(doc => {
+      let uid = doc.forEach(doc => {
+        console.log(doc.id);
+        return doc.id;
+      });
+      return uid;
+    });
+    return uID;
+  }
+
 }
