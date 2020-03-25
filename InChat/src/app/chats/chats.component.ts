@@ -12,7 +12,11 @@ import { UserService } from '../services/user.service';
 })
 export class ChatsComponent implements OnInit {
 
-  constructor(public chat: ChatService, private afAuth: AuthService, public messageService: MessageService, private userService: UserService) { }
+  constructor(
+    public chat: ChatService,
+    private afAuth: AuthService,
+    public messageService: MessageService,
+    private userService: UserService) { }
 
   ngOnInit() {
     this.afAuth.Auth.auth.onAuthStateChanged(() => {
@@ -20,13 +24,9 @@ export class ChatsComponent implements OnInit {
         console.log('No chats to display');
         return;
       } else {
-        
         console.log(this.afAuth.Auth.auth.currentUser.uid);
-
         return;
       }
     });
   }
-
-  
 }

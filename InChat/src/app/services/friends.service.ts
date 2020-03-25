@@ -17,9 +17,9 @@ export class FriendsService {
   dbRef = this.db.collection('users');
   currentUser = this.afAuth.Auth.auth.currentUser;
 
-  async listFriends(uID: string){
+  async listFriends(uID: string) {
     // not reactive, but works, wont update with added friends
-    var friends = await this.dbRef.doc(uID).ref.get().then(doc => {
+    let friends = await this.dbRef.doc(uID).ref.get().then(doc => {
       console.log(doc.data());
       return doc.data().user.friends;
     });
@@ -37,19 +37,19 @@ export class FriendsService {
     return friends;
   }
 
-  deleteFriend(uID: string, fID: string){
+  deleteFriend(uID: string, fID: string) {
     this.dbRef.doc(uID).update(
-      { 'user.friends': firebase.firestore.FieldValue.arrayRemove(fID)}).then(() => 
-        console.log(uID + " removed friend " + fID));
-    alert(fID + " removed");
+      { 'user.friends': firebase.firestore.FieldValue.arrayRemove(fID)}).then(() =>
+        console.log(uID + ' removed friend ' + fID));
+    alert(fID + ' removed');
     return true;
   }
 
-  addFriend(uID: string, fID: string){
+  addFriend(uID: string, fID: string) {
     this.dbRef.doc(uID).update(
-      { 'user.friends': firebase.firestore.FieldValue.arrayUnion(fID)}).then(() => 
-        console.log(uID + " added friend " + fID));
-    alert(fID + " added");
+      { 'user.friends': firebase.firestore.FieldValue.arrayUnion(fID)}).then(() =>
+        console.log(uID + ' added friend ' + fID));
+    alert(fID + ' added');
     return true;
   }
 

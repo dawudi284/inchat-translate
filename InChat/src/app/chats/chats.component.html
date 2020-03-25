@@ -1,9 +1,9 @@
-<div class="container">
+<div class="container-fluid" >
     <!--Chat holder -->
-    <div class="row mt-3" id="chatHolder" style="height:80vh;">
+    <div class="row" id="chatHolder" style="height:90.55vh;">
         <!--Chat list-->
         <div class="col-3" style="border: rgba(19, 18, 18, 0.623);
-        border-style: outset; border-radius: 5px;">
+        border-style: outset;">
             <div class="row justify-content-center" id="chatsHeader" style="background-color:#7AB1E4; color:white;">
                 Chats</div>
 
@@ -21,9 +21,10 @@
 
         <!--Messages-->
         <div id="messageContainer" class="col-9" style="border: rgba(19, 18, 18, 0.623);
-        border-style: outset;">
-            <div style = "" class="input-group mb-3">
-                <input #messageBox type="text" class="form-control" placeholder="Message..." aria-label="Message"
+        border-style: outset; position: relative; bottom: 0;">
+        <h1></h1>
+            <div style= "position: absolute; bottom: 0px; width: -moz-available;" class="input-group mb-3 mr-2">
+                <input #messageBox  type="text" class="form-control" placeholder="Message..." aria-label="Message"
                     aria-describedby="button-addon2">
                 <div>
                     <button class="btn btn-outline-secondary" type="button"
