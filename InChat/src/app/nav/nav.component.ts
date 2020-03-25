@@ -53,13 +53,12 @@ export class NavComponent implements OnInit {
   async deleteWrapper() {
     const uid = this.afAuth.Auth.auth.currentUser.uid;
     if (this.loggedIn === true) {
-      this.afAuth.signOut(true);
+      await this.afAuth.signOut(true);
       console.log('Sign Out');
       console.log('B4 delete');
       await this.userService.deleteUser(uid).then(() => {
         console.log('deleted');
       });
-
       console.log('After');
     }
   }

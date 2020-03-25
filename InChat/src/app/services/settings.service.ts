@@ -11,9 +11,9 @@ export class SettingsService {
 
   codes: string[] = ['en', 'es', 'fr', 'it', 'ko', 'ru', 'ur'];
   codeNames: string[] = ['English', 'Spanish', 'French', 'Italian', 'Korean', 'Russian', 'Urdu'];
-  
 
   ngOnInit() {
+
   }
 
   changeLanguage(langCode: string) {

@@ -1,6 +1,5 @@
 
 export interface Chat {
-    chatId: string;
     chat: ChatsEntity;
     languages: string[];
 }
