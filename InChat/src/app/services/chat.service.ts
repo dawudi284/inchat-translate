@@ -7,7 +7,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 @Injectable({
   providedIn: 'root'
 })
-export class ChatsService {
+export class ChatService {
 
   chatDocRef;
   currentChat;
