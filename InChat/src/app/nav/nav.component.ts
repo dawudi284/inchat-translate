@@ -1,13 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ChatsComponent } from '../chats/chats.component';
-import { SettingsComponent } from '../settings/settings.component';
-import { FriendsListComponent } from '../friends-list/friends-list.component';
-import { HomeComponent } from '../home/home.component';
-import { SignInComponent } from '../sign-in/sign-in.component';
 import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { AuthService } from '../services/auth.service';
 import { UserService } from '../services/user.service';
 import { SettingsService } from '../services/settings.service';
+import { User } from '../models/user.model';
 
 
 @Component({
@@ -40,6 +36,10 @@ export class NavComponent implements OnInit {
         this.loggedIn = true;
         this.currentUser = this.afAuth.Auth.auth.currentUser;
         add = await this.userService.doesUserExist(this.currentUser.uid);
+        this.userService.getUser(this.currentUser.uid).subscribe(user => {
+          this.userService.setCurrentUser(user as User);
+          console.log(this.userService.getCurrentUser().userDB.language);
+        });
       }
       if (add) {
         console.log('NOT added');
@@ -53,17 +53,15 @@ export class NavComponent implements OnInit {
   async deleteWrapper() {
     const uid = this.afAuth.Auth.auth.currentUser.uid;
     if (this.loggedIn === true) {
-      await this.afAuth.signOut(true);
-      console.log('Sign Out');
-      console.log('B4 delete');
-      await this.userService.deleteUser(uid).then(() => {
-        console.log('deleted');
+      await this.afAuth.signOut(true).then(() => {
+        return this.userService.deleteUser(uid);
+      }).then(() => {
+
       });
-      console.log('After');
     }
   }
 
-  async editWrapper(uName: string){
+  async editWrapper(uName: string) {
     await this.userService.editUsername(uName);
     console.log('Success!');
   }
