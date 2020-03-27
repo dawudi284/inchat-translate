@@ -4,6 +4,7 @@ import { auth } from 'firebase/app';
 import { FriendsService } from '../services/friends.service';
 import { HttpClient } from '@angular/common/http';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
+import { UserService } from '../services/user.service';
 
 
 @Component({
@@ -13,7 +14,7 @@ import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firest
 })
 export class FriendsListComponent implements OnInit {
 
-  constructor(private afAuth: AuthService, private  friendsService: FriendsService) { }
+  constructor(private afAuth: AuthService, private  friendsService: FriendsService, private userService: UserService) { }
 
     friends;
     uid = this.afAuth.Auth.auth.currentUser.uid;

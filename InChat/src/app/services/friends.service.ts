@@ -2,10 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { AuthService } from './auth.service';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 import * as firebase from 'firebase/app';
-import { User } from '../models/user.model';
+
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +19,7 @@ export class FriendsService {
     // not reactive, but works, wont update with added friends
     let friends = await this.dbRef.doc(uID).ref.get().then(doc => {
       console.log(doc.data());
-      return doc.data().user.friends;
+      return doc.data().userDB.friends;
     });
 
     // Dynamic as per "valueChanges()," automatically updates when friends are added

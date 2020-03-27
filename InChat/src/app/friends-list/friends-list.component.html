@@ -1,7 +1,7 @@
 <div id="addFriend" class="col-3" style="padding-top:10px">
     <div style = "" class="input-group mb-3">
         <input #addBox type="text" class="form-control" placeholder="Add Friend" aria-label="Message"
-            onkeydown = "if (event.keyCode == 13) document.getElementById('button-addon3').click()"
+            (keyup.enter)="friendsService.addFriend(uid, addBox.value)"
             aria-describedby="button-addon2">
             <div>
                 <button class="btn btn-outline-secondary" type="button"
@@ -13,12 +13,11 @@
 <p>
     Friends List of {{uid}} (lol)
 </p>
-<ul>
-    <div *ngFor="let friend of friends" class="col-3" style="padding:10px">
-        <button class="btn btn-outline-secondary" type="button" 
+<p *ngFor="let friend of userService.getCurrentUser().userDB.friends">
+    <button class="btn btn-outline-secondary" type="button" 
             style="background-color: #ff4444; color:white;" id="button-addon4"
             (click)="friendsService.deleteFriend(uid, friend)">Delete</button>
         {{ friend }}
-    </div>
-</ul>
+</p>
+
 

@@ -60,7 +60,7 @@ export class UserService {
 
   editUsername(newName: string) {
     this.db.collection('users').doc(this.afAuth.Auth.auth.currentUser.uid).update(
-      { 'user.uName': newName }).then(() => console.log('field updated'));
+      { 'userDB.uName': newName }).then(() => console.log('field updated'));
   }
 
   getUser(userId){
