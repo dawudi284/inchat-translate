@@ -21,7 +21,7 @@ export class FriendsService {
     // not reactive, but works, wont update with added friends
     let friends = await this.dbRef.doc(uID).ref.get().then(doc => {
       console.log(doc.data());
-      return doc.data().user.friends;
+      return doc.data().userDB.friends;
     });
 
     // Dynamic as per "valueChanges()," automatically updates when friends are added
@@ -30,8 +30,8 @@ export class FriendsService {
       const user = doc as User;
       console.log(user.uName);
       console.log(user);
-      return user.friends;
-      //return doc.data().user.friends;
+      return userDB.friends;
+      //return doc.data().userDB.friends;
       });
     */
     return friends;
