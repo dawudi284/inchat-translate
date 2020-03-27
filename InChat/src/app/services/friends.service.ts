@@ -32,8 +32,8 @@ export class FriendsService {
       const user = doc as User;
       console.log(user.uName);
       console.log(user);
-      return user.friends;
-      //return doc.data().userdb.friends;
+      return userDB.friends;
+      //return doc.data().userDB.friends;
       });
     return friends;
   }
