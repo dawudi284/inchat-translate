@@ -3,7 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { AuthService } from './auth.service';
 import * as firebase from 'firebase/app';
-
+import { UserService } from '../services/user.service';
+import { User } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +16,7 @@ export class FriendsService {
   dbRef = this.db.collection('users');
   currentUser = this.afAuth.Auth.auth.currentUser;
 
+  /* unneeded
   async listFriends(uID: string) {
     // not reactive, but works, wont update with added friends
     let friends = await this.dbRef.doc(uID).ref.get().then(doc => {
@@ -23,17 +25,17 @@ export class FriendsService {
     });
 
     // Dynamic as per "valueChanges()," automatically updates when friends are added
-    /*
+    // doesn't work though
     var friends = await this.dbRef.doc(uID).valueChanges().subscribe(doc => {
       const user = doc as User;
       console.log(user.uName);
       console.log(user);
-      return user.friends;
-      //return doc.data().user.friends;
+      return userDB.friends;
+      //return doc.data().userDB.friends;
       });
-    */
     return friends;
   }
+  */
 
   deleteFriend(uID: string, fID: string) {
     this.dbRef.doc(uID).update(
@@ -51,4 +53,16 @@ export class FriendsService {
     return true;
   }
 
+  /*under development
+  addFriendEmail(uID:string, friendEmail:string){
+    var friendID = this.db.collection('users', ref => ref.where('email', '==', friendEmail)).valueChanges(
+      {idField: 'eventId'}
+    );
+
+    this.addFriend(uID, friendID);
+    return true;
+  }
+  */
+
+  
 }

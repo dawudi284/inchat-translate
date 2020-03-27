@@ -1,6 +1,6 @@
 <div id="addFriend" class="col-3" style="padding-top:10px">
     <div style = "" class="input-group mb-3">
-        <input #addBox type="text" class="form-control" placeholder="Add Friend" aria-label="Message"
+        <input #addBox type="text" class="form-control" placeholder="Add Friend (by User ID)" aria-label="Message"
             (keyup.enter)="friendsService.addFriend(uid, addBox.value)"
             aria-describedby="button-addon2">
             <div>
@@ -10,11 +10,12 @@
             </div>
     </div>
 </div>
-<p>
-    Friends List of {{uid}} (lol)
-</p>
-<p *ngFor="let friend of userService.getCurrentUser().userDB.friends">
-    <button class="btn btn-outline-secondary" type="button" 
+<h3 class="col-4">
+    Friends List of {{ userService.getCurrentUser().userDB.uName }}
+</h3>
+<ul>
+    <div *ngFor="let friend of userService.getCurrentUser().userDB.friends" class="col-6" style="padding:10px">
+        <button class="btn btn-outline-secondary" type="button" 
             style="background-color: #ff4444; color:white;" id="button-addon4"
             (click)="friendsService.deleteFriend(uid, friend)">Delete</button>
         {{ friend }}
