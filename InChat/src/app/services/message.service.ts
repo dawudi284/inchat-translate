@@ -19,7 +19,7 @@ export class MessageService {
     private userService: UserService) { }
 
   getMessages(chatId: string) {
-    return this.db.collection('messages', ref => ref.where('chatId', '==', chatId)).valueChanges()
+    return this.db.collection('messages', ref => ref.where('chatId', '==', chatId)).valueChanges();
   }
 
   // function used for sending messages. A user would send a message that would get stored on the database
@@ -30,6 +30,7 @@ export class MessageService {
       chatId: chatId,
       isTextBased: true,
       userId: this.afAuth.Auth.auth.currentUser.uid,
+      uName: this.userService.getCurrentUser().userDB.uName,
       timeSent: time,
       originalLanguage: this.userService.getCurrentUser().userDB.language,
       originalMessage: contents,

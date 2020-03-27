@@ -17,10 +17,31 @@
     <!--Messages-->
     <div id="messageContainer" class="col-9" style="border: rgba(19, 18, 18, 0.623);
         border-style: outset; position: relative; bottom: 0;">
-      <div *ngFor="let message of messages">
-        <p>{{message.translations[userService.getCurrentUser().userDB.language]}}</p>
-      </div>
+      <div id="messages" class="overflow-auto">
+        <div *ngFor="let message of messages">
+          <div *ngIf="message.uName !== userService.getCurrentUser().userDB.uName; else rightSide">
+            <div>
+              <div class="card mt-1 mb-1 received">
+                <div class="card-body">
+                  <p class="card-text">{{message.translations[userService.getCurrentUser().userDB.language]}}</p>
+                </div>
+                <p class="text-muted ml-1"><small>From: {{message.uName}} at {{message.timeSent.toDate()}}</small></p>
+              </div>
+            </div>
+          </div>
+          <ng-template #rightSide>
+            <div class="sent">
+              <div class="card mt-1 mb-1 sent">
+                <div class="card-body">
+                  <p class="card-text">{{message.translations[userService.getCurrentUser().userDB.language]}}</p>
+                </div>
+                <p class="text-muted ml-1"><small>From: {{message.uName}} at {{message.timeSent.toDate()}}</small></p>
+              </div>
+            </div>
 
+          </ng-template>
+        </div>
+      </div>
       <div style="position: absolute; bottom: 0px; width: 70vw" class="input-group mb-3">
         <input #messageBox type="text" class="form-control" placeholder="Message..." aria-label="Message"
           aria-describedby="button-addon2" (keyup.enter)="messageService.sendMessage('test-id',messageBox.value)">

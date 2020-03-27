@@ -22,27 +22,26 @@ export class ChatsComponent implements OnInit {
 
   messages;
   translatedMessages: string[] = [];
-
+  func;
   ngOnInit() {
+    this.func = this.scrollBottom();
     this.afAuth.Auth.auth.onAuthStateChanged(() => {
       if (this.afAuth.Auth.auth.currentUser === null) {
         console.log('No chats to display');
       } else {
         console.log(this.afAuth.Auth.auth.currentUser.uid);
-        if (this.userService.getCurrentUser() === undefined) {
-          this.userService.getUser(this.afAuth.Auth.auth.currentUser.uid).subscribe(user => {
-            this.userService.setCurrentUser(user as User);
-            this.messageService.getMessages('test-id').subscribe(response => {
-              response.sort(this.messageSorter);
-              this.messages = response;
-            });
-          });
-        }
+        this.messageService.getMessages('test-id').subscribe(response => {
+            response.sort(this.messageSorter);
+            this.messages = response;
+        });
       }
     });
-
-
   }
+
+  scrollBottom() {
+    console.log('hello');
+  }
+
   messageSorter(a: Message, b: Message) {
     if (a.timeSent === b.timeSent) {
       return 0;
