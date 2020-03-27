@@ -4,6 +4,8 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { User } from 'firebase';
 import { AuthService } from './auth.service';
 import { Message } from '../models/message.model';
+import { Time } from '@angular/common';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,19 +13,28 @@ import { Message } from '../models/message.model';
 
 export class MessageService {
   chatId: string;
-  constructor(private db: AngularFirestore, private afAuth: AuthService) { }
+  constructor(
+    private db: AngularFirestore,
+    private afAuth: AuthService,
+    private userService: UserService) { }
 
-  getMessages(chatId: string, userId: string) {
-    return this.db.collection('chats/' + this.chatId + '/messages', ref => ref.orderBy('timeSent')).valueChanges();
+  getMessages(chatId: string) {
+    return this.db.collection('messages', ref => ref.where('chatId', '==', chatId)).valueChanges()
   }
 
   // function used for sending messages. A user would send a message that would get stored on the database
   sendMessage(chatId: string = 'test-id', contents: string) {
-    let date: Date;
-    date.getDate();
-    let message: Message; // message object to be stored in database
-    message.chatId = chatId;
-    message.userId = this.afAuth.Auth.auth.currentUser.uid;
+    console.log(this.userService.getCurrentUser().userDB.language);
+    let time: Date = new Date();
+    let message: Message = {
+      chatId: chatId,
+      isTextBased: true,
+      userId: this.afAuth.Auth.auth.currentUser.uid,
+      timeSent: time,
+      originalLanguage: this.userService.getCurrentUser().userDB.language,
+      originalMessage: contents,
+    }; // message object to be stored in database
+    console.log('In mService: ' + this.userService.getCurrentUser().userDB.language);
 
     this.db.collection('messages').add(message).then((docRef) => {
       console.log('Message logged with ID: ', docRef.id);

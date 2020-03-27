@@ -39,7 +39,7 @@ export class FriendsService {
 
   deleteFriend(uID: string, fID: string) {
     this.dbRef.doc(uID).update(
-      { 'user.friends': firebase.firestore.FieldValue.arrayRemove(fID)}).then(() =>
+      { 'userDB.friends': firebase.firestore.FieldValue.arrayRemove(fID)}).then(() =>
         console.log(uID + ' removed friend ' + fID));
     alert(fID + ' removed');
     return true;
@@ -47,7 +47,7 @@ export class FriendsService {
 
   addFriend(uID: string, fID: string) {
     this.dbRef.doc(uID).update(
-      { 'user.friends': firebase.firestore.FieldValue.arrayUnion(fID)}).then(() =>
+      { 'userDB.friends': firebase.firestore.FieldValue.arrayUnion(fID)}).then(() =>
         console.log(uID + ' added friend ' + fID));
     alert(fID + ' added');
     return true;

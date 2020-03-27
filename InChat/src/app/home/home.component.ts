@@ -26,30 +26,6 @@ export class HomeComponent implements OnInit {
     private utils: UtilsService) { }
 
   ngOnInit() {
-    this.afAuth.Auth.auth.onAuthStateChanged(() => {
-      console.log(this.afAuth.Auth.auth.currentUser);
-      if (this.afAuth.Auth.auth.currentUser === null) {
-        this.loggedIn = false;
-        console.log('No user');
-        return;
-      } else {
-        this.loggedIn = true;
-        this.currentUser = this.afAuth.Auth.auth.currentUser;
-      }
-    });
-
-    this.utils.getDocIds('chats').subscribe(data => {
-      for(let id of data) {
-        this.userIds.push(id.ids);
-      }
-    });
-    
   }
 
-  deleteWrapper(inp: string) {
-    if (this.loggedIn === true) {
-      console.log('LoggedIn is true');
-      this.userService.deleteUser(inp);
-    }
-  }
 }

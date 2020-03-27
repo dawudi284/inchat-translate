@@ -21,7 +21,7 @@ export class SettingsService {
     if (this.codes.includes(langCode)){
       const collection = this.db.collection('users').doc(uid);
       collection.update(
-        { 'user.language': langCode }).then(() => console.log('field updated'));
+        { 'userDB.language': langCode }).then(() => console.log('field updated'));
     }
   }
 }

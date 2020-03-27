@@ -7,13 +7,14 @@ import { AngularFireAuth } from '@angular/fire/auth';
 @Injectable({
   providedIn: 'root'
 })
-export class ChatsService {
+export class ChatService {
 
-  chatDocRef;
-  currentChat;
+  chatDocRef: any;
+  currentChat: any;
 
-  constructor(private afAuth: AngularFireAuth,
-              private db: AngularFirestore,) { }
+  constructor(
+    private afAuth: AngularFireAuth,
+    private db: AngularFirestore) { }
 
 
   // Creating a Chat
@@ -22,15 +23,18 @@ export class ChatsService {
         chatName,
         creator: this.afAuth.auth.currentUser.email,
         chatId: '',
-      }).then((docRef) => { this.chatDocRef = docRef.id;
+      }).then((docRef) => {
+        this.chatDocRef = docRef.id;
         docRef.collection('users').add({
           email: this.afAuth.auth.currentUser.email,
           displayNAme: this.afAuth.auth.currentUser.displayName
-        }).then(() => { this.db.collection('chats').add({
+        }).then(() => {
+          this.db.collection('chats').add({
             chatName,
             creator: this.afAuth.auth.currentUser.email
-          }).then((docRef) => { this.db.collection('chats').doc(this.chatDocRef).update({
-              chatId: docRef.id
+          }).then((docRefs) => {
+            this.db.collection('chats').doc(this.chatDocRef).update({
+              chatId: docRefs.id
             }).then(() => {
               resolve();
             });
@@ -42,7 +46,8 @@ export class ChatsService {
 
   getChats() {
     return new Promise((resolve) => {
-      const createdChatObs = this.db.collection('chats', ref => ref.where('creator', '==', this.afAuth.auth.currentUser.email)).valueChanges();
+      const createdChatObs = this.db.collection('chats', ref => ref.where('creator', '==', this.afAuth.auth.currentUser.email))
+      .valueChanges();
       const UserofCollRef = this.db.collection('Userof').ref;
       const queryRef = UserofCollRef.where('email', '==', this.afAuth.auth.currentUser.email);
       queryRef.get().then((snapShot) => {
@@ -56,9 +61,9 @@ export class ChatsService {
       });
     });
   }
-  
+
   //Add users to chat
-   addUser(user) {
+  addUser(user) {
     return new Promise((resolve) => {
       const docRef = this.db.collection('chats').ref;
       const firstlevelquery = docRef.where('chatID', '==', this.currentChat.chatId);
