@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection } from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { AuthService } from './auth.service';
-import { Observable } from 'rxjs';
-import { map, flatMap } from 'rxjs/operators';
 import { User } from '../models/user.model';
 
 @Injectable({
@@ -12,7 +10,7 @@ export class UserService {
 
   constructor(private db: AngularFirestore, private afAuth: AuthService) { }
   dbRef = this.db.collection('users');
-  currentUser = this.afAuth.Auth.auth.currentUser;
+  currentUser;
   users: AngularFirestoreDocument<User>;
 
   async deleteUser(uId: string) {
@@ -25,11 +23,11 @@ export class UserService {
     const docRef = this.dbRef.doc(uId);
     await docRef.get().toPromise().then((doc) => {
       if (doc.exists) {
-        console.log('Document data:', doc.data());
+        // console.log('Document data:', doc.data());
         docExist = true;
       } else {
         // doc.data() will be undefined in this case
-        console.log('No such document!');
+        // console.log('No such document!');
         docExist = false;
       }
     }).catch((error) => {
@@ -49,7 +47,7 @@ export class UserService {
             email: this.afAuth.Auth.auth.currentUser.email,
             status: 'offline',
             lastSeen: null,
-            language: 'en-US',
+            language: 'en',
             friends: [],
             chats: []
           };
@@ -63,26 +61,6 @@ export class UserService {
   editUsername(newName: string) {
     this.db.collection('users').doc(this.afAuth.Auth.auth.currentUser.uid).update(
       { 'user.uName': newName }).then(() => console.log('field updated'));
-  }
-
-  getDocumentIds(collection: string) {
-    console.log('in get doc ids');
-    let ids: any;
-    let finished = false;
-    const items = this.db.collection(collection).valueChanges({ idField: collection + 'ids' });
-    const myObserver = {
-      next: data => {
-        console.log('in next');
-      },
-      error: err => console.error('Error on getDocIds: ' + err),
-      complete: () => {
-        console.log('complete');
-        finished = true;
-        console.log('ids: ' + ids);
-      }
-    };
-    items.subscribe(myObserver);
-
   }
 
   async uIDToUname(uID: string){
@@ -114,6 +92,19 @@ export class UserService {
       return uid;
     });
     return uID;
+  }
+
+  getUser(userId){
+    return this.db.collection('users').doc(userId).valueChanges();
+  }
+
+  getCurrentUser() {
+    return this.currentUser;
+  }
+
+  setCurrentUser(user: User) {
+    this.currentUser = user;
+    // console.log(this.currentUser.userDB.language);
   }
 
 }
