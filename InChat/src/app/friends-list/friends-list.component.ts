@@ -16,7 +16,7 @@ export class FriendsListComponent implements OnInit {
 
   constructor(private afAuth: AuthService, private  friendsService: FriendsService, private userService: UserService) { }
 
-    friendsUID;
+    //friendsUID;
     //friendsUname;
     uid = this.afAuth.Auth.auth.currentUser.uid;
     uName;
@@ -26,17 +26,12 @@ export class FriendsListComponent implements OnInit {
     
     //this.uid = await this.userService.emailToUID("tug51985@temple.edu");
     //var uid = this.afAuth.Auth.auth.currentUser.uid
-    this.uName = await this.userService.uIDToUname(this.uid);
+    //this.uName = await this.userService.uIDToUname(this.uid);
+    //this.uName = this.userService.getCurrentUser().data().userDB.uName;
 
     //asynchronus friends list because function returns promise
-    this.friendsUID = await this.friendsService.listFriends(this.uid);
-    //console.log(this.userService.uIDtoEmail(this.uid));
-
-    /*
-    this.friendsUname = this.friendsUID.map(uID =>
-      await this.userService.uIDToUname(uID)
-    );
-    */
+    //this.friendsUID = await this.friendsService.listFriends(this.uid);
+    //this.friendsUID = this.userService.getCurrentUser().data().userDB.friends;
 
   }
 }
