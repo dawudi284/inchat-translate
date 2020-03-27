@@ -87,7 +87,7 @@ export class UserService {
 
   async uIDToUname(uID: string){
     let uName = await this.dbRef.doc(uID).ref.get().then(doc => {
-      console.log(doc.data().uName);
+      console.log(doc.data().user.uName);
       return doc.data().user.uName;
     });
     return uName;
@@ -107,6 +107,7 @@ export class UserService {
     var queryRef = this.dbRef.ref.where("email", "==", email);
     let uID = await queryRef.get().then(doc => {
       let uid = doc.forEach(doc => {
+        console.log(doc.data());
         console.log(doc.id);
         return doc.id;
       });

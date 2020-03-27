@@ -20,15 +20,17 @@ export class FriendsListComponent implements OnInit {
     //friendsUname;
     uid = this.afAuth.Auth.auth.currentUser.uid;
     uName;
+    
 
   async ngOnInit() {
     
-    this.userService.emailToUID("tug51985@temple.edu");
+    //this.uid = await this.userService.emailToUID("tug51985@temple.edu");
     //var uid = this.afAuth.Auth.auth.currentUser.uid
     this.uName = await this.userService.uIDToUname(this.uid);
 
     //asynchronus friends list because function returns promise
     this.friendsUID = await this.friendsService.listFriends(this.uid);
+    //console.log(this.userService.uIDtoEmail(this.uid));
 
     /*
     this.friendsUname = this.friendsUID.map(uID =>

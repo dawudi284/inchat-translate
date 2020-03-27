@@ -18,7 +18,7 @@
         <button class="btn btn-outline-secondary" type="button" 
             style="background-color: #ff4444; color:white;" id="button-addon4"
             (click)="friendsService.deleteFriend(uid, friend)">Delete</button>
-        {{ friend }}
+        {{ this.userService.uIDToUname(friend) }}
     </div>
 </ul>
 
