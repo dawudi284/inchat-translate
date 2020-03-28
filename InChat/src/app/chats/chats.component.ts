@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { ChatsService } from '../services/chat.service';
+import { ChatService } from '../services/chat.service';
 import { AuthService } from '../services/auth.service';
 import { MessageService } from '../services/message.service';
 import { Message } from '../models/message.model';
 import { UserService } from '../services/user.service';
+import { FriendsService } from '../services/friends.service';
 import { SettingsService } from '../services/settings.service';
 import { User } from '../models/user.model';
 
@@ -15,10 +16,11 @@ import { User } from '../models/user.model';
 export class ChatsComponent implements OnInit {
 
   constructor(
-    public chat: ChatsService,
+    public chat: ChatService,
+    public friendsService: FriendsService,
     private afAuth: AuthService,
     public messageService: MessageService,
-    private userService: UserService) { }
+    public userService: UserService) { }
 
   messages;
   translatedMessages: string[] = [];
