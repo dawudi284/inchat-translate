@@ -5,6 +5,7 @@ import { UserService } from '../services/user.service';
 import { FriendsService } from '../services/friends.service';
 import { HttpClient } from '@angular/common/http';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
+import { UserService } from '../services/user.service';
 
 
 
