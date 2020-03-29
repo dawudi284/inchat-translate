@@ -5,7 +5,6 @@ import { UserService } from '../services/user.service';
 import { FriendsService } from '../services/friends.service';
 import { HttpClient } from '@angular/common/http';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
-import { UserService } from '../services/user.service';
 
 
 @Component({
@@ -15,7 +14,7 @@ import { UserService } from '../services/user.service';
 })
 export class FriendsListComponent implements OnInit {
 
-  constructor(private afAuth: AuthService, private  friendsService: FriendsService, private userService: UserService) { }
+  constructor(private afAuth: AuthService, public friendsService: FriendsService, public userService: UserService) { }
 
     //friendsUID;
     //friendsUname;

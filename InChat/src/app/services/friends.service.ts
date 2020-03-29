@@ -13,7 +13,7 @@ import { User } from '../models/user.model';
 export class FriendsService {
 
   constructor(private http: HttpClient, private db: AngularFirestore, private afAuth: AuthService) { }
-  dbRef = this.db.collection('users');
+  dbRef = this.db.collection('user');
   currentUser = this.afAuth.Auth.auth.currentUser;
 
   /* unneeded
